@@ -611,6 +611,22 @@
   background: var(--accent-teal);
 }
 
+.sos-trigger {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid #d89085;
+  border-radius: 50%;
+  color: #a6382d;
+  background: #fce9e6;
+  box-shadow: var(--shadow);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  cursor: not-allowed;
+}
+
 .contacts-popover {
   position: absolute;
   right: 0;
@@ -746,7 +762,13 @@
 
   .header-actions {
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  .header-status {
+    flex: 1 1 100%;
   }
 
   .dashboard-content {

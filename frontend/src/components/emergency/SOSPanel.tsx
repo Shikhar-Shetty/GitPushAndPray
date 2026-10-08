@@ -11,6 +11,14 @@ const infrastructureLabels: Record<InfrastructurePoint['type'], string> = {
   public: 'Public facility',
 }
 
+export function SOSButton() {
+  return (
+    <button className="sos-trigger" type="button" disabled title="SOS demo action is not connected" aria-label="SOS demo action">
+      SOS
+    </button>
+  )
+}
+
 function SOSPanel({ zone }: SOSPanelProps) {
   const nearestRescue = zone.affectedInfrastructure.find((point) => point.type === 'rescue')
   const nearestShelter = zone.affectedInfrastructure.find((point) => point.type === 'shelter')
@@ -52,10 +60,7 @@ function SOSPanel({ zone }: SOSPanelProps) {
             <li key={point.id}><strong>{infrastructureLabels[point.type]}</strong> · {point.name} · {point.status}</li>
           ))}
         </ul>
-        <button className="sos-button" type="button" disabled title="Available after emergency services are integrated">
-          SOS · Request nearest responder
-        </button>
-        <p className="briefing-note">Demo button only. No call, location, or responder request will be made.</p>
+        <p className="briefing-note">SOS demo action is available from the header. No call, location, or responder request will be made.</p>
       </div>
     </section>
   )

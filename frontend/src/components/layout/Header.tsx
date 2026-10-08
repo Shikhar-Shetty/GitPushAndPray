@@ -1,4 +1,5 @@
 import EmergencyContacts from '../emergency/EmergencyContacts'
+import { SOSButton } from '../emergency/SOSPanel'
 import type { EmergencyContact } from '../../types/flood'
 
 interface HeaderProps {
@@ -23,6 +24,7 @@ function Header({ lastUpdated, contacts }: HeaderProps) {
           <span className="header-divider" aria-hidden="true" />
           <span>Updated {lastUpdated}</span>
         </div>
+        <SOSButton />
         <EmergencyContacts contacts={contacts} />
       </div>
     </header>
