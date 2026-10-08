@@ -6,29 +6,11 @@ OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 NEIGHBOUR_OFFSET_DEGREES = 0.05
 WATER_LEVEL_RUNOFF_SCALE = float(environ.get("WATER_LEVEL_RUNOFF_SCALE", "1"))
 
+CONSTANT_WATER_LEVEL = float(environ.get("CONSTANT_WATER_LEVEL", "5.0"))
+
 
 class WeatherServiceError(RuntimeError):
     pass
-
-
-def _estimate_water_level(hourly: dict) -> float:
-    if not isinstance(hourly, dict):
-        raise WeatherServiceError("Open-Meteo did not return water-level inputs")
-
-    precipitation = hourly.get("precipitation")
-    soil_moisture = hourly.get("soil_moisture_0_to_7cm")
-    if not isinstance(precipitation, list) or not isinstance(soil_moisture, list):
-        raise WeatherServiceError("Open-Meteo did not return water-level inputs")
-
-    recent_precipitation_mm = sum(float(value or 0) for value in precipitation[-24:])
-    soil_values = [float(value) for value in soil_moisture[-24:] if value is not None]
-    if not soil_values:
-        raise WeatherServiceError("Open-Meteo did not return soil-moisture data")
-
-    average_soil_moisture = sum(soil_values) / len(soil_values)
-    saturation = min(max((average_soil_moisture - 0.2) / 0.25, 0.0), 1.0)
-    runoff_fraction = 0.5 + (0.5 * saturation)
-    return (recent_precipitation_mm / 1000) * runoff_fraction * WATER_LEVEL_RUNOFF_SCALE
 
 
 def nearby_coordinates(latitude: float, longitude: float) -> list[dict[str, float]]:
@@ -49,9 +31,6 @@ async def fetch_weather(
         "latitude": ",".join(str(location["latitude"]) for location in locations),
         "longitude": ",".join(str(location["longitude"]) for location in locations),
         "current": "temperature_2m,relative_humidity_2m,precipitation",
-        "hourly": "precipitation,soil_moisture_0_to_7cm",
-        "past_days": 1,
-        "forecast_days": 1,
     }
 
     try:
@@ -69,7 +48,8 @@ async def fetch_weather(
     for location, item in zip(locations, payload):
         try:
             current = item["current"]
-            water_level = _estimate_water_level(item["hourly"])
+            water_level = CONSTANT_WATER_LEVEL
+            
             weather.append(
                 {
                     "Latitude": location["latitude"],
