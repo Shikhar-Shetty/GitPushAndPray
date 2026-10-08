@@ -38,14 +38,16 @@ function Dashboard() {
           <PredictionCard zone={selectedZone} />
         </div>
       </div>
+      <div className="dashboard-section">
+        <RiskFactors factors={selectedZone.riskFactors} />
+      </div>
       <div className="dashboard-section dashboard-section--split">
         <AIBriefing briefing={selectedZone.aiBriefing} />
         <div className="emergency-stack">
           <SOSPanel zone={selectedZone} />
         </div>
       </div>
-      <div className="dashboard-section dashboard-section--split">
-        <RiskFactors factors={selectedZone.riskFactors} />
+      <div className="dashboard-section">
         <PriorityList zones={data.zones} selectedZoneId={selectedZone.zoneId} />
       </div>
     </DashboardLayout>
