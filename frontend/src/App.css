@@ -82,10 +82,6 @@
   align-items: start;
 }
 
-.dashboard-map {
-  grid-row: span 2;
-}
-
 .dashboard-stack {
   display: grid;
   min-width: 0;
@@ -567,8 +563,78 @@
   border-radius: 6px;
 }
 
-.contacts-panel {
-  border-color: #bfd8d6;
+.contacts-widget {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  min-height: 44px;
+}
+
+.contacts-trigger {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid #bfd8d6;
+  border-radius: 50%;
+  color: var(--accent-teal);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font-size: 21px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.contacts-trigger:hover,
+.contacts-trigger:focus-visible,
+.contacts-widget--open .contacts-trigger {
+  color: #fff;
+  background: var(--accent-teal);
+}
+
+.contacts-popover {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  z-index: 700;
+  display: none;
+  width: min(360px, calc(100vw - 40px));
+  box-sizing: border-box;
+  padding: 16px;
+  border: 1px solid #bfd8d6;
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 16px 36px rgba(31, 68, 70, 0.16);
+}
+
+.contacts-widget:hover .contacts-popover,
+.contacts-widget--open .contacts-popover {
+  display: block;
+}
+
+.contacts-popover-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.contacts-popover-heading h2 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: 17px;
+}
+
+.contacts-popover-heading p {
+  margin: 3px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.contacts-popover-heading > span {
+  color: var(--accent-teal);
+  font-size: 20px;
 }
 
 .contacts-list {
@@ -682,6 +748,11 @@
 
   .response-facilities {
     grid-template-columns: 1fr;
+  }
+
+  .contacts-popover {
+    right: -2px;
+    width: min(320px, calc(100vw - 28px));
   }
 
   .weather-hero {

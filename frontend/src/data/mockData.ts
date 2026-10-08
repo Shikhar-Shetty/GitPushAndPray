@@ -25,6 +25,24 @@ export const mockEmergencyContacts = [
     phone: '100',
     description: 'Police emergency assistance',
   },
+  {
+    id: 'contact-district-disaster-control-room',
+    name: 'District Disaster Control Room / Helpline',
+    phone: '1077',
+    description: 'District disaster-related assistance',
+  },
+  {
+    id: 'contact-relief-commissioner',
+    name: 'Relief Commissioner (Natural Calamities)',
+    phone: '1070',
+    description: 'Natural calamity assistance',
+  },
+  {
+    id: 'contact-mescom',
+    name: 'Electricity / MESCOM',
+    phone: '1912',
+    description: 'Electricity emergency assistance',
+  },
 ] satisfies EmergencyContact[]
 
 const infrastructure = {
