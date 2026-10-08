@@ -19,7 +19,7 @@ FEATURES = [
 MODEL_PATH = Path(
     environ.get(
         "FLOOD_MODEL_PATH",
-        Path(__file__).resolve().parents[3] / "flood_model.json",
+        Path(__file__).resolve().parents[1] / "ml/flood_model.json",
     )
 )
 
