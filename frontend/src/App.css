@@ -52,6 +52,12 @@
   gap: 9px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .status-dot {
   width: 7px;
   height: 7px;
@@ -570,6 +576,11 @@
   min-height: 44px;
 }
 
+.app-header .contacts-popover {
+  top: calc(100% + 8px);
+  bottom: auto;
+}
+
 .contacts-trigger {
   display: grid;
   width: 44px;
@@ -723,6 +734,11 @@
     align-items: start;
     flex-direction: column;
     gap: 12px;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .dashboard-content {

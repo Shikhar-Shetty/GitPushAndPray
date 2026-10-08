@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import AIBriefing from '../components/insights/AIBriefing'
-import EmergencyContacts from '../components/emergency/EmergencyContacts'
 import RiskFactors from '../components/insights/RiskFactors'
 import SOSPanel from '../components/emergency/SOSPanel'
 import DashboardLayout from '../components/layout/DashboardLayout'
@@ -24,7 +23,7 @@ function Dashboard() {
   ]
 
   return (
-    <DashboardLayout header={<Header lastUpdated={data.lastUpdated} />}>
+    <DashboardLayout header={<Header lastUpdated={data.lastUpdated} contacts={data.emergencyContacts} />}>
       <div className="dashboard-grid">
         <FloodMap
           zones={data.zones}
@@ -47,7 +46,6 @@ function Dashboard() {
         <AIBriefing briefing={selectedZone.aiBriefing} />
         <div className="emergency-stack">
           <SOSPanel zone={selectedZone} />
-          <EmergencyContacts contacts={data.emergencyContacts} />
         </div>
       </div>
     </DashboardLayout>
