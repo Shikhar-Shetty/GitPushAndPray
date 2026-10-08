@@ -9,8 +9,10 @@ export interface WeatherSnapshot {
   location: string
   temperatureCelsius: number
   rainfallMillimeters: number
+  precipitationMillimeters: number
   windKilometersPerHour: number
   condition: string
+  weatherStatus: 'normal' | 'watch' | 'warning'
   observedAt: string
 }
 
