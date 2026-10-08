@@ -1,13 +1,11 @@
 import EmergencyContacts from '../emergency/EmergencyContacts'
-import { SOSButton } from '../emergency/SOSPanel'
-import type { EmergencyContact } from '../../types/flood'
+import SOSButton from '../emergency/SOSButton'
 
 interface HeaderProps {
   lastUpdated: string
-  contacts: EmergencyContact[]
 }
 
-function Header({ lastUpdated, contacts }: HeaderProps) {
+function Header({ lastUpdated }: HeaderProps) {
   return (
     <header className="app-header">
       <div className="brand-lockup">
@@ -25,7 +23,7 @@ function Header({ lastUpdated, contacts }: HeaderProps) {
           <span>Updated {lastUpdated}</span>
         </div>
         <SOSButton />
-        <EmergencyContacts contacts={contacts} />
+        <EmergencyContacts />
       </div>
     </header>
   )

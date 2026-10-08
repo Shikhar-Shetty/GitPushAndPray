@@ -1,11 +1,7 @@
 import { useState } from 'react'
-import type { EmergencyContact } from '../../types/flood'
+import { indiaEmergencyContacts } from '../../data/emergencyContacts'
 
-interface EmergencyContactsProps {
-  contacts: EmergencyContact[]
-}
-
-function EmergencyContacts({ contacts }: EmergencyContactsProps) {
+function EmergencyContacts() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -30,7 +26,7 @@ function EmergencyContacts({ contacts }: EmergencyContactsProps) {
           <span aria-hidden="true">☎</span>
         </div>
         <div className="contacts-list">
-          {contacts.map((contact) => (
+          {indiaEmergencyContacts.map((contact) => (
             <div className="contact-item" key={contact.id}>
               <div>
                 <strong>{contact.name}</strong>
@@ -42,7 +38,7 @@ function EmergencyContacts({ contacts }: EmergencyContactsProps) {
             </div>
           ))}
         </div>
-        <p className="briefing-note">Quick reference only. Service integration is not connected.</p>
+        <p className="briefing-note">Tap a number to call from a supported device.</p>
       </section>
     </div>
   )

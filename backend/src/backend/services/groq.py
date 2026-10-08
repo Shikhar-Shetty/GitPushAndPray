@@ -40,7 +40,7 @@ async def explain_prediction(prediction: dict) -> str:
             "content": (
                 "Explain a flood prediction to a non-technical user in 2-3 concise sentences. "
                 "Use only the supplied data. Mention the strongest factors and whether the risk "
-                "is low, moderate, or high. And what other factors are actually causing this"
+                "is low, moderate, or high. And what other factors are actually causing this. Plain text, Do not return JSON or bold or any other formatting."
             ),
         },
         {"role": "user", "content": json.dumps(prompt)},
