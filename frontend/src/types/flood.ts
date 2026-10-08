@@ -25,6 +25,7 @@ export interface InfrastructurePoint {
   type: 'hospital' | 'shelter' | 'rescue' | 'public'
   status: 'operational' | 'monitor' | 'at-risk'
   priority: number
+  distanceKilometers: number
   zoneIds: string[]
   coordinates: Coordinates
 }
@@ -41,6 +42,8 @@ export interface FloodZone {
   aiBriefing: string
   affectedInfrastructure: InfrastructurePoint[]
   priority: number
+  emergencyStatus: 'monitoring' | 'elevated' | 'urgent' | 'critical'
+  recommendedAction: string
   coordinates: Coordinates
   weather: WeatherSnapshot
 }

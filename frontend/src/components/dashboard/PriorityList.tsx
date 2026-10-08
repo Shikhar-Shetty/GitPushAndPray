@@ -31,7 +31,10 @@ function PriorityList({ zones, selectedZoneId }: PriorityListProps) {
               <span className="priority-rank">{index + 1}</span>
               <span className="priority-content">
                 <strong>{zone.zoneName}</strong>
-                <span>{zone.severity} · {zone.riskProbability}% mock risk</span>
+                <span className={`priority-level priority-level--${zone.riskLevel}`}>{zone.riskLevel.toUpperCase()} · {zone.riskProbability}% mock risk</span>
+                <span>{zone.severity}</span>
+                <span>Affected: {zone.affectedInfrastructure.map((point) => point.name).join(', ')}</span>
+                <span>Reason: {zone.riskFactors[0]?.label ?? 'Combined mock risk factors'}</span>
               </span>
             </li>
           ))}

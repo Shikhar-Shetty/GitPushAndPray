@@ -44,7 +44,7 @@ function Dashboard() {
       </div>
       <div className="dashboard-section dashboard-section--split">
         <AIBriefing briefing={selectedZone.aiBriefing} />
-        <SOSPanel infrastructure={selectedZone.affectedInfrastructure} />
+        <SOSPanel zone={selectedZone} />
       </div>
     </DashboardLayout>
   )

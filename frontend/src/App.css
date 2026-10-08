@@ -387,6 +387,16 @@
   font-size: 12px;
 }
 
+.priority-level {
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.priority-level--medium { color: #946b16 !important; }
+.priority-level--high { color: #a74b27 !important; }
+.priority-level--critical { color: #a6382d !important; }
+.priority-level--low { color: #2d7468 !important; }
+
 .briefing {
   color: var(--text-strong);
   font-size: 15px;
@@ -411,6 +421,64 @@
 .sos-panel {
   border-color: #e4b9a9;
   background: #fff8f4;
+}
+
+.sos-panel--critical {
+  border-color: #d89085;
+}
+
+.sos-panel--critical .status-pill,
+.sos-panel--urgent .status-pill {
+  color: #a6382d;
+  background: #fce9e6;
+}
+
+.sos-panel--elevated .status-pill {
+  color: #946b16;
+  background: #fff3d8;
+}
+
+.response-zone,
+.response-action {
+  display: grid;
+  gap: 4px;
+  padding: 11px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.response-zone strong,
+.response-action strong,
+.response-facilities strong {
+  color: var(--text-strong);
+  font-size: 14px;
+}
+
+.response-zone span:last-child,
+.response-facilities span:last-child {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.response-action {
+  margin-top: 10px;
+  border-left: 3px solid var(--danger);
+}
+
+.response-facilities {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 10px 0 16px;
+}
+
+.response-facilities > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #efd8d0;
+  border-radius: 6px;
 }
 
 .sos-button {
@@ -473,5 +541,9 @@
 
   .leaflet-map {
     height: 340px;
+  }
+
+  .response-facilities {
+    grid-template-columns: 1fr;
   }
 }
