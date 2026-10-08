@@ -11,6 +11,7 @@ from backend.services.open_meteo import (
     fetch_weather,
     nearby_coordinates,
 )
+from backend.services.overpass import FacilityServiceError, fetch_nearby_facilities
 from backend.services.shap import ModelNotConfiguredError, predict_with_explanation
 
 router = APIRouter()
@@ -41,6 +42,13 @@ async def predict_nearby(data: NearbyPredictionRequest):
                 "water_level_estimate_m": item["water_level_estimate_m"],
                 **predict_with_explanation(item),
             }
+            prediction["affected_facilities"] = (
+                await fetch_nearby_facilities(
+                    prediction["latitude"], prediction["longitude"]
+                )
+                if prediction["prediction"] == 1
+                else []
+            )
             prediction["explanation"] = await explain_prediction(prediction)
             predictions.append(prediction)
     except ModelNotConfiguredError as error:
@@ -49,6 +57,7 @@ async def predict_nearby(data: NearbyPredictionRequest):
         raise HTTPException(status_code=503, detail=str(error)) from error
     except GroqServiceError as error:
         raise HTTPException(status_code=502, detail=str(error)) from error
+    except FacilityServiceError as error:
+        raise HTTPException(status_code=502, detail=str(error)) from error
 
     return {"predictions": predictions}
-
