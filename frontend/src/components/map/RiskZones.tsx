@@ -19,12 +19,12 @@ function RiskZones({ zones, selectedZoneId, onSelectZone }: RiskZonesProps) {
     <>
       {zones.map((zone) => {
         const [color, fill] = zoneColors[zone.riskLevel]
-        const isSelected = zone.id === selectedZoneId
+        const isSelected = zone.zoneId === selectedZoneId
         return (
           <Circle
             center={[zone.coordinates.latitude, zone.coordinates.longitude]}
             eventHandlers={{ click: () => onSelectZone(zone) }}
-            key={zone.id}
+            key={zone.zoneId}
             pathOptions={{
               color,
               fillColor: fill,
@@ -34,9 +34,9 @@ function RiskZones({ zones, selectedZoneId, onSelectZone }: RiskZonesProps) {
             radius={isSelected ? 720 : 570}
           >
             <Popup>
-              <strong>{zone.name}</strong>
+              <strong>{zone.zoneName}</strong>
               <br />
-              {zone.probability}% mock flood probability
+              {zone.riskProbability}% mock flood probability
             </Popup>
           </Circle>
         )

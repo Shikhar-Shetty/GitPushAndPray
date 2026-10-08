@@ -8,12 +8,12 @@ function AIBriefing({ briefing }: AIBriefingProps) {
       <div className="panel-heading">
         <div>
           <h2 id="briefing-heading">AI briefing</h2>
-          <p>Human-readable guidance placeholder</p>
+          <p>Mock AI-generated guidance for demonstration</p>
         </div>
       </div>
       <div className="card-body">
         <p className="briefing">{briefing}</p>
-        <p className="briefing-note">Mock content for frontend development. Final guidance will come from the backend LLM pipeline.</p>
+        <p className="briefing-note">Demo content only. Final guidance will come from the backend LLM pipeline.</p>
       </div>
     </section>
   )

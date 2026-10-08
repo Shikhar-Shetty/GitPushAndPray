@@ -5,17 +5,6 @@ export interface Coordinates {
   longitude: number
 }
 
-export interface FloodZone {
-  id: string
-  name: string
-  riskLevel: RiskLevel
-  probability: number
-  severity: string
-  onset: string
-  peak: string
-  coordinates: Coordinates
-}
-
 export interface WeatherSnapshot {
   location: string
   temperatureCelsius: number
@@ -25,23 +14,9 @@ export interface WeatherSnapshot {
   observedAt: string
 }
 
-export interface PredictionSummary {
-  severity: string
-  onset: string
-  peak: string
-  confidence: number
-}
-
 export interface RiskFactor {
   label: string
   contribution: number
-}
-
-export interface PriorityItem {
-  id: string
-  name: string
-  detail: string
-  riskLevel: RiskLevel
 }
 
 export interface InfrastructurePoint {
@@ -51,14 +26,23 @@ export interface InfrastructurePoint {
   coordinates: Coordinates
 }
 
+export interface FloodZone {
+  zoneId: string
+  zoneName: string
+  riskLevel: RiskLevel
+  riskProbability: number
+  severity: string
+  expectedOnset: string
+  expectedPeak: string
+  riskFactors: RiskFactor[]
+  aiBriefing: string
+  affectedInfrastructure: InfrastructurePoint[]
+  priority: number
+  coordinates: Coordinates
+  weather: WeatherSnapshot
+}
+
 export interface DashboardData {
   lastUpdated: string
-  selectedZone: FloodZone
   zones: FloodZone[]
-  weather: WeatherSnapshot
-  prediction: PredictionSummary
-  riskFactors: RiskFactor[]
-  priorityItems: PriorityItem[]
-  infrastructure: InfrastructurePoint[]
-  briefing: string
 }

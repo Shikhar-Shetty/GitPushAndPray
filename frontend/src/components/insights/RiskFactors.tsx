@@ -10,15 +10,15 @@ function RiskFactors({ factors }: RiskFactorsProps) {
       <div className="panel-heading">
         <div>
           <h2 id="factors-heading">Why this area is at risk</h2>
-          <p>SHAP factors will be supplied by the model service.</p>
+          <p>Mock SHAP-style contributions for demonstration.</p>
         </div>
       </div>
       <div className="card-body">
         <ul className="factor-list">
           {factors.map((factor) => (
             <li className="factor-item" key={factor.label}>
-              <span className="factor-value">{factor.contribution}%</span>
-              <span className="factor-bar"><span style={{ width: `${factor.contribution}%` }} /></span>
+              <span className="factor-value">+{factor.contribution.toFixed(2)}</span>
+              <span className="factor-bar"><span style={{ width: `${factor.contribution * 100}%` }} /></span>
               <span className="metric-label">{factor.label}</span>
             </li>
           ))}

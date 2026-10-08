@@ -13,37 +13,37 @@ import { mockDashboardData } from '../data/mockData'
 
 function Dashboard() {
   const data = mockDashboardData
-  const [selectedZone, setSelectedZone] = useState(data.selectedZone)
+  const [selectedZone, setSelectedZone] = useState(data.zones[0])
+  const infrastructure = [
+    ...new Map(
+      data.zones
+        .flatMap((zone) => zone.affectedInfrastructure)
+        .map((point) => [point.id, point]),
+    ).values(),
+  ]
 
   return (
     <DashboardLayout header={<Header lastUpdated={data.lastUpdated} />}>
       <div className="dashboard-grid">
         <FloodMap
           zones={data.zones}
-          infrastructure={data.infrastructure}
-          selectedZoneId={selectedZone.id}
+          infrastructure={infrastructure}
+          selectedZoneId={selectedZone.zoneId}
           onSelectZone={setSelectedZone}
         />
         <div className="dashboard-stack">
           <RiskSummary zone={selectedZone} />
-          <WeatherCard weather={data.weather} />
-          <PredictionCard
-            prediction={{
-              ...data.prediction,
-              severity: selectedZone.severity,
-              onset: selectedZone.onset,
-              peak: selectedZone.peak,
-            }}
-          />
+          <WeatherCard weather={selectedZone.weather} />
+          <PredictionCard zone={selectedZone} />
         </div>
       </div>
       <div className="dashboard-section dashboard-section--split">
-        <RiskFactors factors={data.riskFactors} />
-        <PriorityList items={data.priorityItems} />
+        <RiskFactors factors={selectedZone.riskFactors} />
+        <PriorityList zones={data.zones} selectedZoneId={selectedZone.zoneId} />
       </div>
       <div className="dashboard-section dashboard-section--split">
-        <AIBriefing briefing={data.briefing} />
-        <SOSPanel />
+        <AIBriefing briefing={selectedZone.aiBriefing} />
+        <SOSPanel infrastructure={selectedZone.affectedInfrastructure} />
       </div>
     </DashboardLayout>
   )

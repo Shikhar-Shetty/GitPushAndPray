@@ -1,26 +1,29 @@
-import type { PriorityItem } from '../../types/flood'
+import type { FloodZone } from '../../types/flood'
 
 interface PriorityListProps {
-  items: PriorityItem[]
+  zones: FloodZone[]
+  selectedZoneId: string
 }
 
-function PriorityList({ items }: PriorityListProps) {
+function PriorityList({ zones, selectedZoneId }: PriorityListProps) {
+  const priorityZones = [...zones].sort((first, second) => first.priority - second.priority)
+
   return (
     <section className="panel" aria-labelledby="priority-heading">
       <div className="panel-heading">
         <div>
           <h2 id="priority-heading">Response priorities</h2>
-          <p>Areas needing attention first</p>
+          <p>Ranked mock areas requiring attention</p>
         </div>
       </div>
       <div className="card-body">
         <ol className="priority-list">
-          {items.map((item, index) => (
-            <li className="priority-item" key={item.id}>
+          {priorityZones.map((zone, index) => (
+            <li className={`priority-item${zone.zoneId === selectedZoneId ? ' priority-item--selected' : ''}`} key={zone.zoneId}>
               <span className="priority-rank">{index + 1}</span>
               <span className="priority-content">
-                <strong>{item.name}</strong>
-                <span>{item.detail} · {item.riskLevel} risk</span>
+                <strong>{zone.zoneName}</strong>
+                <span>{zone.severity} · {zone.riskProbability}% mock risk</span>
               </span>
             </li>
           ))}

@@ -291,6 +291,13 @@
   border-bottom: 0;
 }
 
+.priority-item--selected {
+  margin-inline: -8px;
+  padding-inline: 8px;
+  border-radius: 6px;
+  background: var(--accent-wash);
+}
+
 .priority-rank {
   display: grid;
   width: 22px;
@@ -331,6 +338,15 @@
   font-size: 12px;
 }
 
+.infrastructure-list {
+  display: grid;
+  gap: 7px;
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: var(--text-strong);
+  font-size: 13px;
+}
+
 .sos-panel {
   border-color: #e4b9a9;
   background: #fff8f4;
@@ -352,6 +368,11 @@
 .sos-button:hover,
 .sos-button:focus-visible {
   background: #a83b2f;
+}
+
+.sos-button:disabled {
+  background: #d89a90;
+  cursor: not-allowed;
 }
 
 @media (max-width: 900px) {
