@@ -1,0 +1,66 @@
+import type { DashboardData } from '../types/flood'
+
+export const mockDashboardData: DashboardData = {
+  lastUpdated: '08 Oct 2026, 09:42 IST',
+  selectedZone: {
+    id: 'zone-mangaluru-east',
+    name: 'Mangaluru East',
+    riskLevel: 'high',
+    probability: 78,
+    coordinates: { latitude: 12.9141, longitude: 74.8560 },
+  },
+  zones: [
+    {
+      id: 'zone-mangaluru-east',
+      name: 'Mangaluru East',
+      riskLevel: 'high',
+      probability: 78,
+      coordinates: { latitude: 12.9141, longitude: 74.8560 },
+    },
+    {
+      id: 'zone-port-ward',
+      name: 'Port Ward',
+      riskLevel: 'critical',
+      probability: 91,
+      coordinates: { latitude: 12.8728, longitude: 74.8422 },
+    },
+    {
+      id: 'zone-kuloor',
+      name: 'Kuloor Corridor',
+      riskLevel: 'moderate',
+      probability: 54,
+      coordinates: { latitude: 12.9484, longitude: 74.8312 },
+    },
+  ],
+  weather: {
+    location: 'Mangaluru, Karnataka',
+    temperatureCelsius: 28,
+    rainfallMillimeters: 42,
+    windKilometersPerHour: 18,
+    condition: 'Heavy rain nearby',
+    observedAt: '09:30 IST',
+  },
+  prediction: {
+    severity: 'Severe flooding possible',
+    onset: 'Within 6 hours',
+    peak: '18:00 - 21:00 IST',
+    confidence: 84,
+  },
+  riskFactors: [
+    { label: 'Recent rainfall', contribution: 86 },
+    { label: 'River level', contribution: 68 },
+    { label: 'Low elevation', contribution: 61 },
+    { label: 'Soil saturation', contribution: 49 },
+  ],
+  priorityItems: [
+    { id: 'priority-1', name: 'Port Ward', detail: 'Evacuation review needed', riskLevel: 'critical' },
+    { id: 'priority-2', name: 'NH 66 underpass', detail: 'Monitor road access', riskLevel: 'high' },
+    { id: 'priority-3', name: 'Kuloor shelter route', detail: 'Keep route clear', riskLevel: 'moderate' },
+  ],
+  infrastructure: [
+    { id: 'facility-1', name: 'District Hospital', category: 'hospital', coordinates: { latitude: 12.8996, longitude: 74.8420 } },
+    { id: 'facility-2', name: 'Central Relief Shelter', category: 'shelter', coordinates: { latitude: 12.9220, longitude: 74.8501 } },
+    { id: 'facility-3', name: 'NH 66 underpass', category: 'road', coordinates: { latitude: 12.9364, longitude: 74.8323 } },
+  ],
+  briefing: 'Rainfall is intensifying over low-lying eastern wards. Prepare to move vulnerable residents from Port Ward first and keep the NH 66 underpass under observation as water levels rise.',
+}
