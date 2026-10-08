@@ -28,6 +28,7 @@ function Dashboard() {
         <FloodMap
           zones={data.zones}
           infrastructure={infrastructure}
+          selectedInfrastructureIds={selectedZone.affectedInfrastructure.map((point) => point.id)}
           selectedZoneId={selectedZone.zoneId}
           onSelectZone={setSelectedZone}
         />

@@ -7,6 +7,7 @@ interface PriorityListProps {
 
 function PriorityList({ zones, selectedZoneId }: PriorityListProps) {
   const priorityZones = [...zones].sort((first, second) => first.priority - second.priority)
+  const selectedZone = zones.find((zone) => zone.zoneId === selectedZoneId)
 
   return (
     <section className="panel" aria-labelledby="priority-heading">
@@ -17,6 +18,13 @@ function PriorityList({ zones, selectedZoneId }: PriorityListProps) {
         </div>
       </div>
       <div className="card-body">
+        {selectedZone && (
+          <div className="priority-focus">
+            <span className="meta-label">Selected zone priority</span>
+            <strong>{selectedZone.priority === 0 ? 'Immediate response' : `Priority ${selectedZone.priority}`}</strong>
+            <span>{selectedZone.affectedInfrastructure.length} associated infrastructure point{selectedZone.affectedInfrastructure.length === 1 ? '' : 's'}</span>
+          </div>
+        )}
         <ol className="priority-list">
           {priorityZones.map((zone, index) => (
             <li className={`priority-item${zone.zoneId === selectedZoneId ? ' priority-item--selected' : ''}`} key={zone.zoneId}>

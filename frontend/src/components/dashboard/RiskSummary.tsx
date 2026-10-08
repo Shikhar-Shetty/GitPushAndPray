@@ -6,7 +6,7 @@ interface RiskSummaryProps {
 
 const riskStyles = {
   low: { color: '#2d7468', background: '#e2f1ed', label: 'Low' },
-  moderate: { color: '#946b16', background: '#fff3d8', label: 'Moderate' },
+  medium: { color: '#946b16', background: '#fff3d8', label: 'Medium' },
   high: { color: '#a74b27', background: '#fff0e9', label: 'High' },
   critical: { color: '#a6382d', background: '#fce9e6', label: 'Critical' },
 } as const

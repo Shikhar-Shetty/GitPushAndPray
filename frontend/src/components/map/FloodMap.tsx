@@ -8,11 +8,12 @@ import 'leaflet/dist/leaflet.css'
 interface FloodMapProps {
   zones: FloodZone[]
   infrastructure: InfrastructurePoint[]
+  selectedInfrastructureIds: string[]
   selectedZoneId: string
   onSelectZone: (zone: FloodZone) => void
 }
 
-function FloodMap({ zones, infrastructure, selectedZoneId, onSelectZone }: FloodMapProps) {
+function FloodMap({ zones, infrastructure, selectedInfrastructureIds, selectedZoneId, onSelectZone }: FloodMapProps) {
   return (
     <section className="panel dashboard-map" aria-labelledby="map-heading">
       <div className="panel-heading">
@@ -40,7 +41,7 @@ function FloodMap({ zones, infrastructure, selectedZoneId, onSelectZone }: Flood
             selectedZoneId={selectedZoneId}
             onSelectZone={onSelectZone}
           />
-          <InfrastructureLayer points={infrastructure} />
+          <InfrastructureLayer points={infrastructure} selectedPointIds={selectedInfrastructureIds} />
         </MapContainer>
         <MapLegend />
       </div>

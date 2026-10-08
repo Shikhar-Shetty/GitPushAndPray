@@ -1,4 +1,4 @@
-export type RiskLevel = 'low' | 'moderate' | 'high' | 'critical'
+export type RiskLevel = 'low' | 'medium' | 'high' | 'critical'
 
 export interface Coordinates {
   latitude: number
@@ -22,7 +22,10 @@ export interface RiskFactor {
 export interface InfrastructurePoint {
   id: string
   name: string
-  category: 'hospital' | 'shelter' | 'road'
+  type: 'hospital' | 'shelter' | 'rescue' | 'public'
+  status: 'operational' | 'monitor' | 'at-risk'
+  priority: number
+  zoneIds: string[]
   coordinates: Coordinates
 }
 
