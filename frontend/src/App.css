@@ -113,6 +113,15 @@
   grid-auto-rows: max-content;
 }
 
+.dashboard-section--equal {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+  grid-auto-rows: max-content;
+}
+
 .panel {
   min-width: 0;
   background: var(--surface);
@@ -776,7 +785,8 @@
 
 @media (max-width: 1080px) {
   .dashboard-grid,
-  .dashboard-section--split {
+  .dashboard-section--split,
+  .dashboard-section--equal {
     grid-template-columns: 1fr;
   }
 
