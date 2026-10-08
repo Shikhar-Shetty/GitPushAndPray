@@ -1,26 +1,17 @@
-import type { FloodZone, InfrastructurePoint } from '../../types/flood'
 import type { Coordinates, PredictionPoint } from '../../types/flood'
 import { useEffect } from 'react'
-import { CircleMarker, MapContainer, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet'
-import InfrastructureLayer from './InfrastructureLayer'
+import { MapContainer, TileLayer, useMap, useMapEvents } from 'react-leaflet'
 import MapLegend from './MapLegend'
 import PredictionLayer from './PredictionLayer'
-import RiskZones from './RiskZones'
 import 'leaflet/dist/leaflet.css'
 
 interface FloodMapProps {
-  zones: FloodZone[]
-  infrastructure: InfrastructurePoint[]
   predictions: PredictionPoint[]
-  predictionSource: 'real' | 'mock'
-  refreshStatus: 'live' | 'updating' | 'error'
+  refreshStatus: 'idle' | 'live' | 'updating' | 'error'
   lastUpdated: string | null
   locationError: string | null
   selectedPredictionIndex: number
-  requestedCoordinates: Coordinates
-  selectedInfrastructureIds: string[]
-  selectedZoneId: string
-  onSelectZone: (zone: FloodZone) => void
+  requestedCoordinates: Coordinates | null
   onSelectPrediction: (index: number) => void
   onRequestLocation: (coordinates: Coordinates) => void
   onUseMyLocation: () => void
@@ -28,7 +19,14 @@ interface FloodMapProps {
 
 function MapClickHandler({ onRequestLocation }: Pick<FloodMapProps, 'onRequestLocation'>) {
   useMapEvents({
-    click: (event) => onRequestLocation({ latitude: event.latlng.lat, longitude: event.latlng.lng }),
+    click: (event) => {
+      const target = event.originalEvent.target
+      if (target instanceof Element && target.closest('.leaflet-interactive, .leaflet-marker-icon')) {
+        return
+      }
+
+      onRequestLocation({ latitude: event.latlng.lat, longitude: event.latlng.lng })
+    },
   })
   return null
 }
@@ -37,25 +35,20 @@ function MapCenterController({ requestedCoordinates }: Pick<FloodMapProps, 'requ
   const map = useMap()
 
   useEffect(() => {
+    if (!requestedCoordinates) return
     map.setView([requestedCoordinates.latitude, requestedCoordinates.longitude])
-  }, [requestedCoordinates.latitude, requestedCoordinates.longitude, map])
+  }, [requestedCoordinates, map])
 
   return null
 }
 
 function FloodMap({
-  zones,
-  infrastructure,
   predictions,
-  predictionSource,
   refreshStatus,
   lastUpdated,
   locationError,
   selectedPredictionIndex,
   requestedCoordinates,
-  selectedInfrastructureIds,
-  selectedZoneId,
-  onSelectZone,
   onSelectPrediction,
   onRequestLocation,
   onUseMyLocation,
@@ -64,18 +57,18 @@ function FloodMap({
     ? 'Updating...'
     : refreshStatus === 'error'
       ? 'Update issue'
-      : predictionSource === 'real' ? 'Live' : 'Demo fallback'
+      : refreshStatus === 'live' ? 'Live' : 'Choose a location'
 
   return (
     <section className="panel dashboard-map" aria-labelledby="map-heading">
       <div className="panel-heading">
         <div>
           <h2 id="map-heading">Flood risk map</h2>
-          <p>{predictionSource === 'real' ? 'Nearby backend prediction points.' : 'Demo fallback prediction points.'}</p>
+          <p>Choose a location to load nearby backend predictions.</p>
         </div>
         <div className="map-header-actions">
           <button className="map-location-button" type="button" onClick={onUseMyLocation}>Use my location</button>
-          <span className="status-pill" style={{ '--status-color': predictionSource === 'real' ? '#0b7775' : '#946b16', '--status-bg': predictionSource === 'real' ? '#dcefee' : '#fff3d8' } as React.CSSProperties}>
+          <span className="status-pill" style={{ '--status-color': refreshStatus === 'error' ? '#a6382d' : '#0b7775', '--status-bg': refreshStatus === 'error' ? '#fce9e6' : '#dcefee' } as React.CSSProperties}>
             {statusLabel}
           </span>
         </div>
@@ -84,7 +77,7 @@ function FloodMap({
       {locationError && <p className="map-error" role="alert">{locationError}</p>}
       <div className="map-frame">
         <MapContainer
-          center={[12.9141, 74.8560]}
+          center={[20, 0]}
           className="leaflet-map"
           scrollWheelZoom
           zoom={12}
@@ -95,32 +88,17 @@ function FloodMap({
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {predictionSource === 'mock' ? (
-            <RiskZones
-              zones={zones}
-              selectedZoneId={selectedZoneId}
-              onSelectZone={onSelectZone}
-            />
-          ) : (
-            <PredictionLayer
-              predictions={predictions}
-              selectedIndex={selectedPredictionIndex}
-              onSelectPrediction={onSelectPrediction}
-            />
-          )}
-          <InfrastructureLayer points={infrastructure} selectedPointIds={selectedInfrastructureIds} />
-          <CircleMarker
-            center={[requestedCoordinates.latitude, requestedCoordinates.longitude]}
-            pathOptions={{ color: '#18343a', fillColor: '#fff', fillOpacity: 1, weight: 2, dashArray: '4 4' }}
-            radius={7}
-          >
-            <Popup>Requested prediction location</Popup>
-          </CircleMarker>
+          <PredictionLayer
+            predictions={predictions}
+            selectedIndex={selectedPredictionIndex}
+            onSelectPrediction={onSelectPrediction}
+          />
         </MapContainer>
         <MapLegend />
       </div>
-      {refreshStatus === 'error' && <p className="map-error">Unable to update - showing the last available result.</p>}
-      {predictionSource === 'real' && predictions.length === 0 && <p className="map-empty">No nearby prediction areas were returned.</p>}
+      {refreshStatus === 'error' && <p className="map-error">Unable to load predictions for this location.</p>}
+      {refreshStatus === 'idle' && <p className="map-empty">Click the map or use your location to request predictions.</p>}
+      {refreshStatus === 'live' && predictions.length === 0 && <p className="map-empty">No nearby prediction areas were returned.</p>}
     </section>
   )
 }

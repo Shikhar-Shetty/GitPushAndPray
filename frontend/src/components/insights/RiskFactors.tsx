@@ -14,8 +14,7 @@ function RiskFactors({ prediction }: RiskFactorsProps) {
     <section className="panel" aria-labelledby="factors-heading">
       <div className="panel-heading">
         <div>
-          <h2 id="factors-heading">Why this area is at risk</h2>
-          <p>{factors.length > 0 ? 'SHAP values returned by the backend.' : 'No SHAP values returned for this prediction.'}</p>
+          <h2 id="factors-heading">SHAP Values returned by the backend</h2>
         </div>
       </div>
       <div className="card-body">

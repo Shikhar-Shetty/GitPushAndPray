@@ -1,4 +1,4 @@
-import { CircleMarker, Popup } from 'react-leaflet'
+import { CircleMarker } from 'react-leaflet'
 import type { PredictionPoint } from '../../types/flood'
 
 interface PredictionLayerProps {
@@ -11,15 +11,11 @@ function predictionKey(point: PredictionPoint, index: number): string {
   return `${point.latitude}:${point.longitude}:${index}`
 }
 
-function getRiskLabel(probability: number): string {
-  if (probability >= 0.7) return 'High'
-  if (probability >= 0.4) return 'Medium'
-  return 'Low'
-}
-
 function getRiskColor(probability: number): string {
-  const hue = Math.max(0, Math.min(120, (1 - probability) * 120))
-  return `hsl(${hue} 72% 42%)`
+  if (probability >= 0.8) return '#c4443b'
+  if (probability >= 0.5) return '#d6a329'
+  if (probability >= 0.25) return '#8da94a'
+  return '#3c956e'
 }
 
 function PredictionLayer({ predictions, selectedIndex, onSelectPrediction }: PredictionLayerProps) {
@@ -27,13 +23,17 @@ function PredictionLayer({ predictions, selectedIndex, onSelectPrediction }: Pre
     <>
       {predictions.map((point, index) => {
         const isSelected = index === selectedIndex
-        const riskLabel = getRiskLabel(point.flood_probability)
         const color = getRiskColor(point.flood_probability)
 
         return (
           <CircleMarker
             center={[point.latitude, point.longitude]}
-            eventHandlers={{ click: () => onSelectPrediction(index) }}
+            eventHandlers={{
+              click: (event) => {
+                event.originalEvent.stopPropagation()
+                onSelectPrediction(index)
+              },
+            }}
             key={predictionKey(point, index)}
             pathOptions={{
               color,
@@ -42,17 +42,7 @@ function PredictionLayer({ predictions, selectedIndex, onSelectPrediction }: Pre
               weight: isSelected ? 5 : 3,
             }}
             radius={isSelected ? 15 : 11}
-          >
-            <Popup>
-              <strong>{riskLabel} flood risk</strong>
-              <br />
-              Flood probability: {(point.flood_probability * 100).toFixed(0)}%
-              <br />
-              Status: {point.prediction === 1 ? 'Flood predicted' : 'Lower flood risk'}
-              <br />
-              Water level estimate: {point.water_level_estimate_m.toFixed(3)} m
-            </Popup>
-          </CircleMarker>
+          />
         )
       })}
     </>
