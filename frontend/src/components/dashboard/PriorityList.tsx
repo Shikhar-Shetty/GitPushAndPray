@@ -1,11 +1,12 @@
-import type { FloodZone } from '../../types/flood'
+import type { FloodZone, PredictionPoint } from '../../types/flood'
 
 interface PriorityListProps {
   zones: FloodZone[]
   selectedZoneId: string
+  prediction: PredictionPoint | null
 }
 
-function PriorityList({ zones, selectedZoneId }: PriorityListProps) {
+function PriorityList({ zones, selectedZoneId, prediction }: PriorityListProps) {
   const priorityZones = [...zones].sort((first, second) => first.priority - second.priority)
   const selectedZone = zones.find((zone) => zone.zoneId === selectedZoneId)
 
@@ -20,9 +21,9 @@ function PriorityList({ zones, selectedZoneId }: PriorityListProps) {
       <div className="card-body">
         {selectedZone && (
           <div className="priority-focus">
-            <span className="meta-label">Selected zone priority</span>
-            <strong>{selectedZone.priority === 0 ? 'Immediate response' : `Priority ${selectedZone.priority}`}</strong>
-            <span>{selectedZone.affectedInfrastructure.length} associated infrastructure point{selectedZone.affectedInfrastructure.length === 1 ? '' : 's'}</span>
+            <span className="meta-label">Selected prediction priority</span>
+            <strong>{prediction && prediction.flood_probability >= 0.7 ? 'High response priority' : prediction && prediction.flood_probability >= 0.4 ? 'Monitor closely' : 'Lower response priority'}</strong>
+            <span>{prediction ? `${(prediction.flood_probability * 100).toFixed(0)}% flood probability · ` : ''}{selectedZone.affectedInfrastructure.length} associated infrastructure point{selectedZone.affectedInfrastructure.length === 1 ? '' : 's'}</span>
           </div>
         )}
         <ol className="priority-list">

@@ -28,6 +28,21 @@ export interface RiskFactor {
   contribution: number
 }
 
+export type ShapValues = Record<string, number>
+
+export interface PredictionPoint {
+  latitude: number
+  longitude: number
+  water_level_estimate_m: number
+  prediction: number
+  flood_probability: number
+  shap_values: ShapValues
+}
+
+export interface PredictionResponse {
+  predictions: PredictionPoint[]
+}
+
 export interface InfrastructurePoint {
   id: string
   name: string

@@ -1,4 +1,4 @@
-import type { DashboardData, EmergencyContact, FloodZone, InfrastructurePoint } from '../types/flood'
+import type { DashboardData, EmergencyContact, FloodZone, InfrastructurePoint, PredictionPoint } from '../types/flood'
 
 export const mockEmergencyContacts = [
   {
@@ -199,3 +199,12 @@ export const mockDashboardData: DashboardData = {
   zones: mockFloodZones,
   emergencyContacts: mockEmergencyContacts,
 }
+
+export const mockPredictionPoints: PredictionPoint[] = mockFloodZones.map((zone) => ({
+  latitude: zone.coordinates.latitude,
+  longitude: zone.coordinates.longitude,
+  water_level_estimate_m: zone.riskProbability / 1000,
+  prediction: zone.riskProbability >= 70 ? 1 : 0,
+  flood_probability: zone.riskProbability / 100,
+  shap_values: Object.fromEntries(zone.riskFactors.map((factor) => [factor.label, factor.contribution])),
+}))

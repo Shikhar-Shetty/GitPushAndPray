@@ -1,29 +1,41 @@
-import type { FloodZone } from '../../types/flood'
+import type { PredictionPoint } from '../../types/flood'
 
 interface PredictionCardProps {
-  zone: FloodZone
+  prediction: PredictionPoint | null
+  isMock: boolean
 }
 
-function PredictionCard({ zone }: PredictionCardProps) {
+function PredictionCard({ prediction, isMock }: PredictionCardProps) {
+  if (!prediction) {
+    return (
+      <section className="panel" aria-labelledby="prediction-heading">
+        <div className="panel-heading"><h2 id="prediction-heading">Forecast window</h2></div>
+        <div className="card-body"><p className="briefing-note">No nearby prediction areas were returned.</p></div>
+      </section>
+    )
+  }
+
   return (
     <section className="panel" aria-labelledby="prediction-heading">
       <div className="panel-heading">
         <div>
           <h2 id="prediction-heading">Forecast window</h2>
-          <p>{zone.zoneName} · mock forecast</p>
+          <p>{prediction.latitude.toFixed(4)}, {prediction.longitude.toFixed(4)}</p>
         </div>
-        <span className="status-pill" style={{ '--status-color': '#0b7775', '--status-bg': '#dcefee' } as React.CSSProperties}>Demo data</span>
+        <span className="status-pill" style={{ '--status-color': '#0b7775', '--status-bg': '#dcefee' } as React.CSSProperties}>
+          {isMock ? 'Demo data' : 'Backend data'}
+        </span>
       </div>
       <div className="card-body">
-        <div className="metric-value">{zone.riskProbability}%</div>
-        <div className="metric-label">Mock flood probability</div>
+        <div className="metric-value">{(prediction.flood_probability * 100).toFixed(0)}%</div>
+        <div className="metric-label">Flood probability</div>
         <div className="metric-detail">
-          <span>Severity <strong>{zone.severity}</strong></span>
-          <span>Onset <strong>{zone.expectedOnset}</strong></span>
+          <span>Prediction</span>
+          <strong>{prediction.prediction === 1 ? 'Flood predicted' : 'Lower flood risk'}</strong>
         </div>
         <div className="metric-detail">
-          <span>Expected peak</span>
-          <strong>{zone.expectedPeak}</strong>
+          <span>Water level estimate</span>
+          <strong>{prediction.water_level_estimate_m.toFixed(3)} m</strong>
         </div>
       </div>
     </section>
