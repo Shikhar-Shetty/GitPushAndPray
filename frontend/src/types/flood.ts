@@ -10,6 +10,9 @@ export interface FloodZone {
   name: string
   riskLevel: RiskLevel
   probability: number
+  severity: string
+  onset: string
+  peak: string
   coordinates: Coordinates
 }
 

@@ -1,7 +1,10 @@
 import type { FloodZone } from '../../types/flood'
+import { Circle, Popup } from 'react-leaflet'
 
 interface RiskZonesProps {
   zones: FloodZone[]
+  selectedZoneId: string
+  onSelectZone: (zone: FloodZone) => void
 }
 
 const zoneColors = {
@@ -11,22 +14,34 @@ const zoneColors = {
   critical: ['#bd493a', 'rgba(189, 73, 58, 0.28)'],
 } as const
 
-function RiskZones({ zones }: RiskZonesProps) {
+function RiskZones({ zones, selectedZoneId, onSelectZone }: RiskZonesProps) {
   return (
-    <div aria-label="Flood risk zones">
+    <>
       {zones.map((zone) => {
         const [color, fill] = zoneColors[zone.riskLevel]
+        const isSelected = zone.id === selectedZoneId
         return (
-          <div
-            className="map-zone"
+          <Circle
+            center={[zone.coordinates.latitude, zone.coordinates.longitude]}
+            eventHandlers={{ click: () => onSelectZone(zone) }}
             key={zone.id}
-            style={{ '--zone-color': color, '--zone-fill': fill } as React.CSSProperties}
+            pathOptions={{
+              color,
+              fillColor: fill,
+              fillOpacity: isSelected ? 0.55 : 0.35,
+              weight: isSelected ? 4 : 2,
+            }}
+            radius={isSelected ? 720 : 570}
           >
-            {zone.name}
-          </div>
+            <Popup>
+              <strong>{zone.name}</strong>
+              <br />
+              {zone.probability}% mock flood probability
+            </Popup>
+          </Circle>
         )
       })}
-    </div>
+    </>
   )
 }
 

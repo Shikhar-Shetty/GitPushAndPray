@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import AIBriefing from '../components/insights/AIBriefing'
 import RiskFactors from '../components/insights/RiskFactors'
 import SOSPanel from '../components/emergency/SOSPanel'
@@ -12,15 +13,28 @@ import { mockDashboardData } from '../data/mockData'
 
 function Dashboard() {
   const data = mockDashboardData
+  const [selectedZone, setSelectedZone] = useState(data.selectedZone)
 
   return (
     <DashboardLayout header={<Header lastUpdated={data.lastUpdated} />}>
       <div className="dashboard-grid">
-        <FloodMap zones={data.zones} infrastructure={data.infrastructure} />
+        <FloodMap
+          zones={data.zones}
+          infrastructure={data.infrastructure}
+          selectedZoneId={selectedZone.id}
+          onSelectZone={setSelectedZone}
+        />
         <div className="dashboard-stack">
-          <RiskSummary zone={data.selectedZone} />
+          <RiskSummary zone={selectedZone} />
           <WeatherCard weather={data.weather} />
-          <PredictionCard prediction={data.prediction} />
+          <PredictionCard
+            prediction={{
+              ...data.prediction,
+              severity: selectedZone.severity,
+              onset: selectedZone.onset,
+              peak: selectedZone.peak,
+            }}
+          />
         </div>
       </div>
       <div className="dashboard-section dashboard-section--split">

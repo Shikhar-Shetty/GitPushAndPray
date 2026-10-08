@@ -20,8 +20,16 @@ function RiskSummary({ zone }: RiskSummaryProps) {
         <div className="metric-value">{zone.probability}%</div>
         <div className="metric-label">Estimated flood probability</div>
         <div className="metric-detail">
-          <span>Coordinates</span>
-          <strong>{zone.coordinates.latitude.toFixed(3)}, {zone.coordinates.longitude.toFixed(3)}</strong>
+          <span>Severity</span>
+          <strong>{zone.severity}</strong>
+        </div>
+        <div className="metric-detail">
+          <span>Onset</span>
+          <strong>{zone.onset}</strong>
+        </div>
+        <div className="metric-detail">
+          <span>Peak</span>
+          <strong>{zone.peak}</strong>
         </div>
       </div>
     </section>
