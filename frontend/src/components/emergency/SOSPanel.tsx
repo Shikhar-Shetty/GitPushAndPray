@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { FloodZone, InfrastructurePoint } from '../../types/flood'
 
 interface SOSPanelProps {
@@ -14,6 +14,21 @@ const infrastructureLabels: Record<InfrastructurePoint['type'], string> = {
 
 export function SOSButton() {
   const [isSent, setIsSent] = useState(false)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+  }, [])
+
+  function handleClick() {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    setIsSent(true)
+    timeoutRef.current = setTimeout(() => setIsSent(false), 5000)
+  }
 
   return (
     <div className="sos-action">
@@ -22,7 +37,7 @@ export function SOSButton() {
         type="button"
         title="Send demo SOS alert"
         aria-label="Send demo SOS alert"
-        onClick={() => setIsSent(true)}
+        onClick={handleClick}
       >
         SOS
       </button>

@@ -39,14 +39,14 @@ function Dashboard() {
         </div>
       </div>
       <div className="dashboard-section dashboard-section--split">
-        <RiskFactors factors={selectedZone.riskFactors} />
-        <PriorityList zones={data.zones} selectedZoneId={selectedZone.zoneId} />
-      </div>
-      <div className="dashboard-section dashboard-section--split">
         <AIBriefing briefing={selectedZone.aiBriefing} />
         <div className="emergency-stack">
           <SOSPanel zone={selectedZone} />
         </div>
+      </div>
+      <div className="dashboard-section dashboard-section--split">
+        <RiskFactors factors={selectedZone.riskFactors} />
+        <PriorityList zones={data.zones} selectedZoneId={selectedZone.zoneId} />
       </div>
     </DashboardLayout>
   )
