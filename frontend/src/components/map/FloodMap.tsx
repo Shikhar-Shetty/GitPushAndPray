@@ -7,7 +7,7 @@ import 'leaflet/dist/leaflet.css'
 
 interface FloodMapProps {
   predictions: PredictionPoint[]
-  refreshStatus: 'idle' | 'live' | 'updating' | 'error'
+  loadStatus: 'idle' | 'loaded' | 'loading' | 'error'
   lastUpdated: string | null
   locationError: string | null
   selectedPredictionIndex: number
@@ -44,7 +44,7 @@ function MapCenterController({ requestedCoordinates }: Pick<FloodMapProps, 'requ
 
 function FloodMap({
   predictions,
-  refreshStatus,
+  loadStatus,
   lastUpdated,
   locationError,
   selectedPredictionIndex,
@@ -53,11 +53,11 @@ function FloodMap({
   onRequestLocation,
   onUseMyLocation,
 }: FloodMapProps) {
-  const statusLabel = refreshStatus === 'updating'
-    ? 'Updating...'
-    : refreshStatus === 'error'
-      ? 'Update issue'
-      : refreshStatus === 'live' ? 'Live' : 'Choose a location'
+  const statusLabel = loadStatus === 'loading'
+    ? 'Loading...'
+    : loadStatus === 'error'
+      ? 'Load issue'
+      : loadStatus === 'loaded' ? 'Loaded' : 'Choose a location'
 
   return (
     <section className="panel dashboard-map" aria-labelledby="map-heading">
@@ -68,7 +68,7 @@ function FloodMap({
         </div>
         <div className="map-header-actions">
           <button className="map-location-button" type="button" onClick={onUseMyLocation}>Use my location</button>
-          <span className="status-pill" style={{ '--status-color': refreshStatus === 'error' ? '#a6382d' : '#0b7775', '--status-bg': refreshStatus === 'error' ? '#fce9e6' : '#dcefee' } as React.CSSProperties}>
+          <span className="status-pill" style={{ '--status-color': loadStatus === 'error' ? '#a6382d' : '#0b7775', '--status-bg': loadStatus === 'error' ? '#fce9e6' : '#dcefee' } as React.CSSProperties}>
             {statusLabel}
           </span>
         </div>
@@ -96,9 +96,9 @@ function FloodMap({
         </MapContainer>
         <MapLegend />
       </div>
-      {refreshStatus === 'error' && <p className="map-error">Unable to load predictions for this location.</p>}
-      {refreshStatus === 'idle' && <p className="map-empty">Click the map or use your location to request predictions.</p>}
-      {refreshStatus === 'live' && predictions.length === 0 && <p className="map-empty">No nearby prediction areas were returned.</p>}
+      {loadStatus === 'error' && <p className="map-error">Unable to load predictions for this location.</p>}
+      {loadStatus === 'idle' && <p className="map-empty">Click the map or use your location to request predictions.</p>}
+      {loadStatus === 'loaded' && predictions.length === 0 && <p className="map-empty">No nearby prediction areas were returned.</p>}
     </section>
   )
 }
