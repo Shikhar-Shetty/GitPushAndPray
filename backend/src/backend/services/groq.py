@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 load_dotenv(Path(__file__).resolve().parents[3] / ".env", override=False)
-GROQ_MODEL = environ.get("GROQ_MODEL", "llama-3.1-8b-instant")
+GROQ_MODEL = environ.get("GROQ_MODEL", "qwen/qwen3.8-27b")
 
 
 class GroqConfigurationError(RuntimeError):
