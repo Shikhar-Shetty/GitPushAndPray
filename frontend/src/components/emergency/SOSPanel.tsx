@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { FloodZone, InfrastructurePoint } from '../../types/flood'
 
 interface SOSPanelProps {
@@ -12,10 +13,25 @@ const infrastructureLabels: Record<InfrastructurePoint['type'], string> = {
 }
 
 export function SOSButton() {
+  const [isSent, setIsSent] = useState(false)
+
   return (
-    <button className="sos-trigger" type="button" disabled title="SOS demo action is not connected" aria-label="SOS demo action">
-      SOS
-    </button>
+    <div className="sos-action">
+      <button
+        className="sos-trigger"
+        type="button"
+        title="Send demo SOS alert"
+        aria-label="Send demo SOS alert"
+        onClick={() => setIsSent(true)}
+      >
+        SOS
+      </button>
+      {isSent && (
+        <span className="sos-confirmation" role="status">
+          Location sent to the emergency team (demo only)
+        </span>
+      )}
+    </div>
   )
 }
 

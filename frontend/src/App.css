@@ -627,6 +627,38 @@
   cursor: not-allowed;
 }
 
+.sos-action {
+  position: relative;
+}
+
+.sos-trigger {
+  cursor: pointer;
+}
+
+.sos-trigger:hover,
+.sos-trigger:focus-visible {
+  color: #fff;
+  background: #bd493a;
+}
+
+.sos-confirmation {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 800;
+  width: max-content;
+  max-width: min(280px, calc(100vw - 28px));
+  padding: 9px 11px;
+  border: 1px solid #d89085;
+  border-radius: 7px;
+  color: #7d2f29;
+  background: #fce9e6;
+  box-shadow: var(--shadow);
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: left;
+}
+
 .contacts-popover {
   position: absolute;
   right: 0;
