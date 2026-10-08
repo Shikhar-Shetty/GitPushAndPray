@@ -516,6 +516,22 @@
   gap: 3px;
 }
 
+.priority-content--button {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.priority-content--button:focus-visible {
+  outline: 2px solid var(--accent-teal);
+  outline-offset: 3px;
+}
+
 .priority-content strong {
   color: var(--text-strong);
   font-size: 13px;

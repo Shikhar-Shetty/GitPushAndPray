@@ -154,7 +154,15 @@ function Dashboard() {
         <div className="emergency-stack">
           <SOSPanel zone={selectedZone} />
         </div>
-        <PriorityList zones={data.zones} selectedZoneId={selectedZone.zoneId} prediction={selectedPrediction} />
+        <PriorityList
+          zones={data.zones}
+          selectedZoneId={selectedZone.zoneId}
+          prediction={selectedPrediction}
+          predictions={predictions}
+          isRealData={predictionSource === 'real'}
+          selectedPredictionIndex={selectedPredictionIndex}
+          onSelectPrediction={setSelectedPredictionIndex}
+        />
       </div>
     </DashboardLayout>
   )
