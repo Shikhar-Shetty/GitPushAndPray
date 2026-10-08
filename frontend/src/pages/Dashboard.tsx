@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import AIBriefing from '../components/insights/AIBriefing'
 import RiskFactors from '../components/insights/RiskFactors'
 import DashboardLayout from '../components/layout/DashboardLayout'
@@ -6,7 +6,6 @@ import Header from '../components/layout/Header'
 import FloodMap from '../components/map/FloodMap'
 import PredictionCard from '../components/dashboard/PredictionCard'
 import PriorityList from '../components/dashboard/PriorityList'
-import RiskSummary from '../components/dashboard/RiskSummary'
 import { getNearbyPredictions } from '../services/api'
 import type { Coordinates, PredictionPoint } from '../types/flood'
 
@@ -23,11 +22,9 @@ function Dashboard() {
   const [requestCoordinates, setRequestCoordinates] = useState<Coordinates | null>(null)
   const [predictions, setPredictions] = useState<PredictionPoint[]>([])
   const [selectedPredictionIndex, setSelectedPredictionIndex] = useState(0)
-  const [refreshStatus, setRefreshStatus] = useState<'idle' | 'live' | 'updating' | 'error'>('idle')
+  const [loadStatus, setLoadStatus] = useState<'idle' | 'loaded' | 'loading' | 'error'>('idle')
   const [lastUpdated, setLastUpdated] = useState<string | null>(null)
   const [locationError, setLocationError] = useState<string | null>(null)
-  const requestInProgress = useRef(false)
-
   const selectedPrediction = predictions[selectedPredictionIndex] ?? null
 
   useEffect(() => {
@@ -37,33 +34,27 @@ function Dashboard() {
     const controller = new AbortController()
     let disposed = false
 
-    async function refreshPredictions() {
-      if (requestInProgress.current) return
-      requestInProgress.current = true
-      setRefreshStatus('updating')
+    async function loadPredictions() {
+      setLoadStatus('loading')
       try {
         const response = await getNearbyPredictions(coordinates.latitude, coordinates.longitude, controller.signal)
         if (disposed) return
         setPredictions(response.predictions)
         setSelectedPredictionIndex((index) => response.predictions.length === 0 ? 0 : Math.min(index, response.predictions.length - 1))
         setLastUpdated(formatUpdatedTime())
-        setRefreshStatus('live')
+        setLoadStatus('loaded')
       } catch (error) {
         if (disposed || (error instanceof DOMException && error.name === 'AbortError')) return
         setPredictions([])
-        setRefreshStatus('error')
-      } finally {
-        requestInProgress.current = false
+        setLoadStatus('error')
       }
     }
 
-    void refreshPredictions()
-    const interval = window.setInterval(() => void refreshPredictions(), 30_000)
+    void loadPredictions()
 
     return () => {
       disposed = true
       controller.abort()
-      window.clearInterval(interval)
     }
   }, [requestCoordinates])
 
@@ -98,7 +89,7 @@ function Dashboard() {
       <div className="dashboard-grid">
         <FloodMap
           predictions={predictions}
-          refreshStatus={refreshStatus}
+          loadStatus={loadStatus}
           lastUpdated={lastUpdated}
           locationError={locationError}
           selectedPredictionIndex={selectedPredictionIndex}
@@ -108,7 +99,6 @@ function Dashboard() {
           onUseMyLocation={handleUseMyLocation}
         />
         <div className="dashboard-stack">
-          <RiskSummary prediction={selectedPrediction} isMock={false} />
           <PredictionCard prediction={selectedPrediction} isMock={false} />
         </div>
       </div>
