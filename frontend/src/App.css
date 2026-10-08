@@ -76,6 +76,7 @@
 
 .dashboard-grid {
   display: grid;
+  min-width: 0;
   grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.85fr);
   gap: 20px;
   align-items: start;
@@ -87,6 +88,7 @@
 
 .dashboard-stack {
   display: grid;
+  min-width: 0;
   gap: 20px;
 }
 
@@ -96,11 +98,15 @@
 
 .dashboard-section--split {
   display: grid;
+  min-width: 0;
   grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
   gap: 20px;
+  align-items: start;
+  grid-auto-rows: max-content;
 }
 
 .panel {
+  min-width: 0;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -113,6 +119,11 @@
   gap: 16px;
   align-items: start;
   padding: 20px 22px 0;
+}
+
+.panel-heading > div,
+.card-body {
+  min-width: 0;
 }
 
 .panel-heading h2,
@@ -349,11 +360,9 @@
 }
 
 .weather-metric > span:last-child {
-  overflow: hidden;
   color: var(--text-muted);
   font-size: 10px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .weather-metric--rainfall {
@@ -369,6 +378,8 @@
 
 .metric-detail {
   display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 12px;
   margin-top: 14px;
@@ -379,7 +390,9 @@
 }
 
 .metric-detail strong {
+  min-width: 0;
   color: var(--text-strong);
+  overflow-wrap: anywhere;
 }
 
 .factor-bar {
@@ -437,6 +450,7 @@
 
 .priority-content {
   display: grid;
+  min-width: 0;
   gap: 3px;
 }
 
@@ -448,6 +462,7 @@
 .priority-content span {
   color: var(--text-muted);
   font-size: 12px;
+  overflow-wrap: anywhere;
 }
 
 .priority-level {
@@ -479,6 +494,7 @@
   padding-left: 18px;
   color: var(--text-strong);
   font-size: 13px;
+  overflow-wrap: anywhere;
 }
 
 .sos-panel {
@@ -499,6 +515,13 @@
 .sos-panel--elevated .status-pill {
   color: #946b16;
   background: #fff3d8;
+}
+
+.emergency-stack {
+  display: grid;
+  min-width: 0;
+  gap: 20px;
+  align-content: start;
 }
 
 .response-zone,
@@ -544,6 +567,57 @@
   border-radius: 6px;
 }
 
+.contacts-panel {
+  border-color: #bfd8d6;
+}
+
+.contacts-list {
+  display: grid;
+  gap: 10px;
+}
+
+.contact-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-muted);
+}
+
+.contact-item > div {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.contact-item strong {
+  color: var(--text-strong);
+  font-size: 13px;
+}
+
+.contact-item span {
+  color: var(--text-muted);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+
+.contact-phone {
+  flex: 0 0 auto;
+  color: var(--accent-teal);
+  font-size: 18px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.contact-phone:hover,
+.contact-phone:focus-visible {
+  text-decoration: underline;
+}
+
 .sos-button {
   width: 100%;
   margin-top: 16px;
@@ -567,7 +641,7 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1080px) {
   .dashboard-grid,
   .dashboard-section--split {
     grid-template-columns: 1fr;

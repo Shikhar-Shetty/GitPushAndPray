@@ -16,6 +16,13 @@ export interface WeatherSnapshot {
   observedAt: string
 }
 
+export interface EmergencyContact {
+  id: string
+  name: string
+  phone: string
+  description: string
+}
+
 export interface RiskFactor {
   label: string
   contribution: number
@@ -53,4 +60,5 @@ export interface FloodZone {
 export interface DashboardData {
   lastUpdated: string
   zones: FloodZone[]
+  emergencyContacts: EmergencyContact[]
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import AIBriefing from '../components/insights/AIBriefing'
+import EmergencyContacts from '../components/emergency/EmergencyContacts'
 import RiskFactors from '../components/insights/RiskFactors'
 import SOSPanel from '../components/emergency/SOSPanel'
 import DashboardLayout from '../components/layout/DashboardLayout'
@@ -44,7 +45,10 @@ function Dashboard() {
       </div>
       <div className="dashboard-section dashboard-section--split">
         <AIBriefing briefing={selectedZone.aiBriefing} />
-        <SOSPanel zone={selectedZone} />
+        <div className="emergency-stack">
+          <SOSPanel zone={selectedZone} />
+          <EmergencyContacts contacts={data.emergencyContacts} />
+        </div>
       </div>
     </DashboardLayout>
   )

@@ -1,4 +1,31 @@
-import type { DashboardData, FloodZone, InfrastructurePoint } from '../types/flood'
+import type { DashboardData, EmergencyContact, FloodZone, InfrastructurePoint } from '../types/flood'
+
+export const mockEmergencyContacts = [
+  {
+    id: 'contact-national-emergency',
+    name: 'National Emergency',
+    phone: '112',
+    description: 'Integrated emergency assistance',
+  },
+  {
+    id: 'contact-ambulance',
+    name: 'Ambulance',
+    phone: '108',
+    description: 'Medical emergency response',
+  },
+  {
+    id: 'contact-fire-rescue',
+    name: 'Fire & Rescue',
+    phone: '101',
+    description: 'Fire and rescue services',
+  },
+  {
+    id: 'contact-police',
+    name: 'Police',
+    phone: '100',
+    description: 'Police emergency assistance',
+  },
+] satisfies EmergencyContact[]
 
 const infrastructure = {
   districtHospital: {
@@ -152,4 +179,5 @@ export const mockFloodZones: FloodZone[] = [
 export const mockDashboardData: DashboardData = {
   lastUpdated: '08 Oct 2026, 09:42 IST',
   zones: mockFloodZones,
+  emergencyContacts: mockEmergencyContacts,
 }
