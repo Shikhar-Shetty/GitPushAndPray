@@ -15,6 +15,7 @@ interface FloodMapProps {
   predictionSource: 'real' | 'mock'
   refreshStatus: 'live' | 'updating' | 'error'
   lastUpdated: string | null
+  locationError: string | null
   selectedPredictionIndex: number
   requestedCoordinates: Coordinates
   selectedInfrastructureIds: string[]
@@ -49,6 +50,7 @@ function FloodMap({
   predictionSource,
   refreshStatus,
   lastUpdated,
+  locationError,
   selectedPredictionIndex,
   requestedCoordinates,
   selectedInfrastructureIds,
@@ -79,6 +81,7 @@ function FloodMap({
         </div>
       </div>
       {lastUpdated && <p className="map-updated">Last updated: {lastUpdated}</p>}
+      {locationError && <p className="map-error" role="alert">{locationError}</p>}
       <div className="map-frame">
         <MapContainer
           center={[12.9141, 74.8560]}

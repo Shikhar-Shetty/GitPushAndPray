@@ -37,6 +37,7 @@ export interface PredictionPoint {
   prediction: number
   flood_probability: number
   shap_values: ShapValues
+  explanation: string
 }
 
 export interface PredictionResponse {

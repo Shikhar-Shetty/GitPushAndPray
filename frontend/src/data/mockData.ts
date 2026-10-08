@@ -207,4 +207,5 @@ export const mockPredictionPoints: PredictionPoint[] = mockFloodZones.map((zone)
   prediction: zone.riskProbability >= 70 ? 1 : 0,
   flood_probability: zone.riskProbability / 100,
   shap_values: Object.fromEntries(zone.riskFactors.map((factor) => [factor.label, factor.contribution])),
+  explanation: '',
 }))

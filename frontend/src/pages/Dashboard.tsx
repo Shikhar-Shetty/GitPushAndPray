@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import AIBriefing from '../components/insights/AIBriefing'
 import RiskFactors from '../components/insights/RiskFactors'
 import SOSPanel from '../components/emergency/SOSPanel'
@@ -32,6 +32,8 @@ function Dashboard() {
   const [refreshStatus, setRefreshStatus] = useState<'live' | 'updating' | 'error'>('updating')
   const [lastUpdated, setLastUpdated] = useState<string | null>(null)
   const [hasRealData, setHasRealData] = useState(false)
+  const [locationError, setLocationError] = useState<string | null>(null)
+  const requestInProgress = useRef(false)
 
   const infrastructure = [
     ...new Map(
@@ -47,6 +49,8 @@ function Dashboard() {
     let disposed = false
 
     async function refreshPredictions() {
+      if (requestInProgress.current) return
+      requestInProgress.current = true
       setRefreshStatus('updating')
       try {
         const response = await getNearbyPredictions(requestCoordinates.latitude, requestCoordinates.longitude, controller.signal)
@@ -64,6 +68,8 @@ function Dashboard() {
           setPredictionSource('mock')
         }
         setRefreshStatus('error')
+      } finally {
+        requestInProgress.current = false
       }
     }
 
@@ -86,13 +92,28 @@ function Dashboard() {
   }
 
   function handleRequestLocation(coordinates: Coordinates) {
+    setLocationError(null)
     setSelectedPredictionIndex(0)
     setRequestCoordinates(coordinates)
   }
 
   function handleUseMyLocation() {
+    setLocationError(null)
+    if (!navigator.geolocation) {
+      setLocationError('Location is unavailable in this browser. Select a location on the map instead.')
+      return
+    }
+
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => handleRequestLocation({ latitude: coords.latitude, longitude: coords.longitude }),
+      (error) => {
+        const message = error.code === error.PERMISSION_DENIED
+          ? 'Location permission was denied. Select a location on the map instead.'
+          : error.code === error.POSITION_UNAVAILABLE
+            ? 'Your location is unavailable right now. Select a location on the map instead.'
+            : 'Location request timed out. Select a location on the map instead.'
+        setLocationError(message)
+      },
     )
   }
 
@@ -106,6 +127,7 @@ function Dashboard() {
           predictionSource={predictionSource}
           refreshStatus={refreshStatus}
           lastUpdated={lastUpdated}
+          locationError={locationError}
           selectedPredictionIndex={selectedPredictionIndex}
           selectedInfrastructureIds={selectedZone.affectedInfrastructure.map((point) => point.id)}
           selectedZoneId={selectedZone.zoneId}
@@ -123,7 +145,10 @@ function Dashboard() {
       </div>
       <div className="dashboard-section dashboard-section--equal">
         <RiskFactors prediction={selectedPrediction} />
-        <AIBriefing briefing={selectedZone.aiBriefing} />
+        <AIBriefing
+          briefing={predictionSource === 'real' ? selectedPrediction?.explanation ?? '' : selectedZone.aiBriefing}
+          isMock={predictionSource === 'mock'}
+        />
       </div>
       <div className="dashboard-section dashboard-section--split">
         <div className="emergency-stack">

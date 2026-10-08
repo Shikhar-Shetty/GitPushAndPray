@@ -7,7 +7,8 @@ function isPredictionResponse(value: unknown): value is PredictionResponse {
     return false
   }
 
-  return (value as PredictionResponse).predictions.every((point) => (
+  const predictions = (value as PredictionResponse).predictions
+  return predictions.length === 5 && predictions.every((point) => (
     point !== null
     && typeof point === 'object'
     && typeof point.latitude === 'number'
@@ -15,8 +16,11 @@ function isPredictionResponse(value: unknown): value is PredictionResponse {
     && typeof point.water_level_estimate_m === 'number'
     && typeof point.prediction === 'number'
     && typeof point.flood_probability === 'number'
+    && typeof point.explanation === 'string'
+    && point.explanation.trim().length > 0
     && point.shap_values !== null
     && typeof point.shap_values === 'object'
+    && !Array.isArray(point.shap_values)
     && Object.values(point.shap_values).every((value) => typeof value === 'number')
   ))
 }
