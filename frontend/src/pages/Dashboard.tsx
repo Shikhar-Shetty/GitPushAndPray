@@ -86,7 +86,7 @@ function Dashboard() {
 
   return (
     <DashboardLayout header={<Header lastUpdated={lastUpdated ?? 'Choose a location'} />}>
-      <div className="dashboard-grid">
+      <div className="dashboard-map-stage">
         <FloodMap
           predictions={predictions}
           loadStatus={loadStatus}
@@ -98,7 +98,7 @@ function Dashboard() {
           onRequestLocation={handleRequestLocation}
           onUseMyLocation={handleUseMyLocation}
         />
-        <div className="dashboard-stack">
+        <div className="dashboard-prediction-overlay">
           <PredictionCard prediction={selectedPrediction} isMock={false} />
         </div>
       </div>
