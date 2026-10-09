@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
-import './App.css'
-import OnboardingPage from './pages/OnboardingPage'
-import MapPage from './pages/MapPage'
-import DetailsPage from './pages/DetailsPage'
-import { getNearbyPredictions } from './services/api'
-import type { Coordinates, PredictionPoint } from './types/flood'
+import AIBriefing from '../components/insights/AIBriefing'
+import RiskFactors from '../components/insights/RiskFactors'
+import DashboardLayout from '../components/layout/DashboardLayout'
+import Header from '../components/layout/Header'
+import FloodMap from '../components/map/FloodMap'
+import PredictionCard from '../components/dashboard/PredictionCard'
+import PriorityList from '../components/dashboard/PriorityList'
+import { getNearbyPredictions } from '../services/api'
+import type { Coordinates, PredictionPoint } from '../types/flood'
 
 function formatUpdatedTime(): string {
   return new Intl.DateTimeFormat('en-IN', {
@@ -15,12 +18,7 @@ function formatUpdatedTime(): string {
   }).format(new Date())
 }
 
-type Page = 'onboarding' | 'map' | 'details'
-
-function App() {
-  const [page, setPage] = useState<Page>('onboarding')
-
-  // Global state previously in Dashboard
+function Dashboard() {
   const [requestCoordinates, setRequestCoordinates] = useState<Coordinates | null>(null)
   const [demoMode, setDemoMode] = useState(false)
   const [predictions, setPredictions] = useState<PredictionPoint[]>([])
@@ -28,6 +26,7 @@ function App() {
   const [loadStatus, setLoadStatus] = useState<'idle' | 'loaded' | 'loading' | 'error'>('idle')
   const [lastUpdated, setLastUpdated] = useState<string | null>(null)
   const [locationError, setLocationError] = useState<string | null>(null)
+  const selectedPrediction = predictions[selectedPredictionIndex] ?? null
 
   useEffect(() => {
     if (!requestCoordinates) return
@@ -87,37 +86,38 @@ function App() {
   }
 
   return (
-    <div className="app-root">
-      {page === 'onboarding' && (
-        <OnboardingPage onGetStarted={() => setPage('map')} />
-      )}
-      {page === 'map' && (
-        <MapPage
+    <DashboardLayout header={<Header lastUpdated={lastUpdated ?? 'Choose a location'} />}>
+      <div className="dashboard-map-stage">
+        <FloodMap
           predictions={predictions}
           loadStatus={loadStatus}
           lastUpdated={lastUpdated}
           locationError={locationError}
           selectedPredictionIndex={selectedPredictionIndex}
           requestedCoordinates={requestCoordinates}
-          demoMode={demoMode}
           onSelectPrediction={setSelectedPredictionIndex}
           onRequestLocation={handleRequestLocation}
           onUseMyLocation={handleUseMyLocation}
+          demoMode={demoMode}
           onToggleDemoMode={setDemoMode}
-          onViewDetails={() => setPage('details')}
         />
-      )}
-      {page === 'details' && (
-        <DetailsPage
+        <div className="dashboard-prediction-overlay">
+          <PredictionCard prediction={selectedPrediction} isMock={false} />
+        </div>
+      </div>
+      <div className="dashboard-section dashboard-section--equal">
+        <RiskFactors prediction={selectedPrediction} />
+        <AIBriefing briefing={selectedPrediction?.explanation ?? ''} isMock={false} />
+      </div>
+      <div className="dashboard-section dashboard-section--split">
+        <PriorityList
           predictions={predictions}
           selectedPredictionIndex={selectedPredictionIndex}
-          lastUpdated={lastUpdated}
           onSelectPrediction={setSelectedPredictionIndex}
-          onBack={() => setPage('map')}
         />
-      )}
-    </div>
+      </div>
+    </DashboardLayout>
   )
 }
 
-export default App
+export default Dashboard

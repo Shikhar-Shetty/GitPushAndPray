@@ -1,0 +1,38 @@
+import EmergencyContacts from '../emergency/EmergencyContacts'
+import SOSButton from '../emergency/SOSButton'
+
+interface HeaderProps {
+  lastUpdated: string
+  onBack?: () => void
+}
+
+function Header({ lastUpdated, onBack }: HeaderProps) {
+  return (
+    <header className="app-header">
+      <div className="brand-lockup">
+        {onBack && (
+          <button className="back-button" type="button" onClick={onBack} aria-label="Back to map">
+            ←
+          </button>
+        )}
+        <span className="brand-mark" aria-hidden="true">FI</span>
+        <div>
+          <p className="brand-name">Flood Intelligence</p>
+          <p className="brand-context">Coastal response dashboard</p>
+        </div>
+      </div>
+      <div className="header-actions">
+        <div className="header-status">
+          <span className="status-dot" aria-hidden="true" />
+          <span>Live monitoring</span>
+          <span className="header-divider" aria-hidden="true" />
+          <span>Updated {lastUpdated}</span>
+        </div>
+        <SOSButton />
+        <EmergencyContacts />
+      </div>
+    </header>
+  )
+}
+
+export default Header
