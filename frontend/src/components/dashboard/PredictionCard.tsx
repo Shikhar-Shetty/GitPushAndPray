@@ -22,7 +22,7 @@ function PredictionCard({ prediction, isMock }: PredictionCardProps) {
           <h2 id="prediction-heading">Forecast window</h2>
           <p>{prediction.latitude.toFixed(4)}, {prediction.longitude.toFixed(4)}</p>
         </div>
-        <span className="status-pill" style={{ '--status-color': '#0b7775', '--status-bg': '#dcefee' } as React.CSSProperties}>
+        <span className="status-pill" style={{ '--status-color': '#70d7cf', '--status-bg': 'rgba(78, 205, 196, 0.12)' } as React.CSSProperties}>
           {isMock ? 'Demo data' : 'Backend data'}
         </span>
       </div>

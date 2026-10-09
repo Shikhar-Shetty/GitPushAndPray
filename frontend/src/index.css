@@ -1,38 +1,34 @@
 :root {
-  --text: #4a5d61;
-  --text-strong: #18343a;
-  --text-muted: #6c7e81;
-  --surface: #fff;
-  --surface-muted: #eef4f2;
-  --border: #d7e2df;
-  --accent-teal: #0b7775;
-  --accent-wash: #dcefee;
-  --danger: #bd493a;
-  --shadow: 0 12px 28px rgba(31, 68, 70, 0.07);
-  --sans: 'Avenir Next', Avenir, 'Trebuchet MS', sans-serif;
+  --text: #dce3e5;
+  --text-strong: #f4f7f8;
+  --text-muted: #8d9a9e;
+  --surface: #181c1e;
+  --surface-muted: #0b0d0e;
+  --surface-raised: #222729;
+  --border: #30383b;
+  --accent-teal: #70d7cf;
+  --accent-wash: rgba(78, 205, 196, .12);
+  --danger: #ef746d;
+  --warning: #e5b653;
+  --success: #70d6a4;
+  --shadow: 0 12px 28px rgba(0, 0, 0, .3);
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
-  font: 16px/1.45 var(--sans);
+  font: 13px/1.45 var(--sans);
   color: var(--text);
   background: var(--surface-muted);
+  color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
-  min-height: 100svh;
-}
-
-body {
-  margin: 0;
-}
-
-p {
-  margin: 0;
-}
-
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
-}
+* { box-sizing: border-box; }
+html { min-width: 320px; scroll-behavior: smooth; }
+body { min-width: 320px; min-height: 100vh; margin: 0; }
+p { margin: 0; }
+button, input, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--accent-teal); outline-offset: 3px; }
+#root { min-height: 100vh; }

@@ -68,7 +68,7 @@ function FloodMap({
         </div>
         <div className="map-header-actions">
           <button className="map-location-button" type="button" onClick={onUseMyLocation}>Use my location</button>
-          <span className="status-pill" style={{ '--status-color': loadStatus === 'error' ? '#a6382d' : '#0b7775', '--status-bg': loadStatus === 'error' ? '#fce9e6' : '#dcefee' } as React.CSSProperties}>
+          <span className="status-pill" style={{ '--status-color': loadStatus === 'error' ? '#ff918c' : '#70d7cf', '--status-bg': loadStatus === 'error' ? 'rgba(242, 107, 103, 0.12)' : 'rgba(78, 205, 196, 0.12)' } as React.CSSProperties}>
             {statusLabel}
           </span>
         </div>
