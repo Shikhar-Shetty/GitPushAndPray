@@ -1,5 +1,6 @@
 import type { PredictionPoint } from '../types/flood'
 import Header from '../components/layout/Header'
+import AffectedFacilities from '../components/dashboard/AffectedFacilities'
 import PredictionCard from '../components/dashboard/PredictionCard'
 import PriorityList from '../components/dashboard/PriorityList'
 import RiskFactors from '../components/insights/RiskFactors'
@@ -68,11 +69,19 @@ function DetailsPage({
           <RiskFactors prediction={selectedPrediction} />
           <AIBriefing briefing={selectedPrediction?.explanation ?? ''} isMock={false} />
         </div>
-        <PriorityList
-          predictions={predictions}
-          selectedPredictionIndex={selectedPredictionIndex}
-          onSelectPrediction={onSelectPrediction}
-        />
+        <div className="details-grid">
+          <PriorityList
+            predictions={predictions}
+            selectedPredictionIndex={selectedPredictionIndex}
+            onSelectPrediction={onSelectPrediction}
+          />
+          {selectedPrediction?.affected_facilities && (
+            <AffectedFacilities
+              key={`${selectedPrediction.latitude}:${selectedPrediction.longitude}`}
+              facilities={selectedPrediction.affected_facilities}
+            />
+          )}
+        </div>
       </main>
     </div>
   )

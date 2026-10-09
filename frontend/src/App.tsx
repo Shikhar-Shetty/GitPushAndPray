@@ -3,7 +3,7 @@ import './App.css'
 import OnboardingPage from './pages/OnboardingPage'
 import MapPage from './pages/MapPage'
 import DetailsPage from './pages/DetailsPage'
-import { getNearbyPredictions } from './services/api'
+import { getNearbyFacilities, getNearbyPredictions } from './services/api'
 import type { Coordinates, PredictionPoint } from './types/flood'
 
 function formatUpdatedTime(): string {
@@ -16,6 +16,7 @@ function formatUpdatedTime(): string {
 }
 
 type Page = 'onboarding' | 'map' | 'details'
+const FACILITY_RISK_THRESHOLD = 0.7
 
 function App() {
   const [page, setPage] = useState<Page>('onboarding')
@@ -45,6 +46,29 @@ function App() {
         setSelectedPredictionIndex((index) => response.predictions.length === 0 ? 0 : Math.min(index, response.predictions.length - 1))
         setLastUpdated(formatUpdatedTime())
         setLoadStatus('loaded')
+
+        if (!(response.predictions[0]?.flood_probability > FACILITY_RISK_THRESHOLD)) {
+          return
+        }
+
+        try {
+          const facilityResponse = await getNearbyFacilities(
+            coordinates.latitude,
+            coordinates.longitude,
+            controller.signal,
+          )
+          if (disposed) return
+          setPredictions((current) => current.map((prediction, index) => (
+            index === 0
+              ? { ...prediction, affected_facilities: facilityResponse.affected_facilities }
+              : prediction
+          )))
+        } catch (error) {
+          if (disposed || (error instanceof DOMException && error.name === 'AbortError')) return
+          setPredictions((current) => current.map((prediction, index) => (
+            index === 0 ? { ...prediction, affected_facilities: [] } : prediction
+          )))
+        }
       } catch (error) {
         if (disposed || (error instanceof DOMException && error.name === 'AbortError')) return
         setPredictions([])

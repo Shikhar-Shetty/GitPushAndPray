@@ -30,6 +30,13 @@ export interface RiskFactor {
 
 export type ShapValues = Record<string, number>
 
+export interface AffectedFacility {
+  name: string
+  type: 'hospital' | 'school'
+  latitude: number
+  longitude: number
+}
+
 export interface PredictionPoint {
   latitude: number
   longitude: number
@@ -38,10 +45,15 @@ export interface PredictionPoint {
   flood_probability: number
   shap_values: ShapValues
   explanation: string
+  affected_facilities?: AffectedFacility[]
 }
 
 export interface PredictionResponse {
   predictions: PredictionPoint[]
+}
+
+export interface FacilityResponse {
+  affected_facilities: AffectedFacility[]
 }
 
 export interface InfrastructurePoint {
