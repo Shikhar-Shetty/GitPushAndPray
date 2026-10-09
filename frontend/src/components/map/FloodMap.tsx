@@ -15,6 +15,8 @@ interface FloodMapProps {
   onSelectPrediction: (index: number) => void
   onRequestLocation: (coordinates: Coordinates) => void
   onUseMyLocation: () => void
+  demoMode: boolean
+  onToggleDemoMode: (enabled: boolean) => void
 }
 
 function MapClickHandler({ onRequestLocation }: Pick<FloodMapProps, 'onRequestLocation'>) {
@@ -52,6 +54,8 @@ function FloodMap({
   onSelectPrediction,
   onRequestLocation,
   onUseMyLocation,
+  demoMode,
+  onToggleDemoMode,
 }: FloodMapProps) {
   const statusLabel = loadStatus === 'loading'
     ? 'Loading...'
@@ -67,6 +71,15 @@ function FloodMap({
           <p>Choose a location to load nearby backend predictions.</p>
         </div>
         <div className="map-header-actions">
+          <button
+            className="demo-mode-toggle"
+            type="button"
+            aria-pressed={demoMode}
+            onClick={() => onToggleDemoMode(!demoMode)}
+          >
+            <span>Demo mode</span>
+            <span className="demo-mode-state">{demoMode ? 'ON' : 'OFF'}</span>
+          </button>
           <button className="map-location-button" type="button" onClick={onUseMyLocation}>Use my location</button>
           <span className="status-pill" style={{ '--status-color': loadStatus === 'error' ? '#ff918c' : '#70d7cf', '--status-bg': loadStatus === 'error' ? 'rgba(242, 107, 103, 0.12)' : 'rgba(78, 205, 196, 0.12)' } as React.CSSProperties}>
             {statusLabel}

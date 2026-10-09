@@ -99,6 +99,11 @@
 .status-pill::before { width: 5px; height: 5px; border-radius: 50%; background: currentColor; content: ''; }
 
 .map-header-actions { display: flex; align-items: center; gap: 7px; }
+.demo-mode-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 6px 9px; border: 1px solid var(--border); border-radius: 6px; color: var(--text-muted); background: var(--surface-raised); font: inherit; font-size: 10px; cursor: pointer; }
+.demo-mode-toggle:hover, .demo-mode-toggle:focus-visible { border-color: var(--warning); color: var(--text-strong); }
+.demo-mode-toggle[aria-pressed="true"] { border-color: rgba(229, 182, 83, .48); color: var(--text-strong); background: rgba(229, 182, 83, .1); }
+.demo-mode-state { min-width: 24px; padding: 2px 5px; border-radius: 4px; color: var(--text-muted); background: rgba(141, 154, 158, .15); font-size: 9px; font-weight: 800; letter-spacing: .04em; text-align: center; }
+.demo-mode-toggle[aria-pressed="true"] .demo-mode-state { color: #1a1710; background: var(--warning); }
 .map-location-button { padding: 6px 9px; border: 1px solid var(--border); border-radius: 6px; color: var(--text); background: var(--surface-raised); font: inherit; font-size: 10px; cursor: pointer; }
 .map-location-button:hover, .map-location-button:focus-visible { border-color: var(--accent-teal); color: var(--accent-teal); }
 .map-updated, .map-error, .map-empty { margin: 6px 16px 0; color: var(--text-muted); font-size: 10px; }

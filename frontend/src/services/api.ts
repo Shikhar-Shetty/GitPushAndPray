@@ -25,7 +25,7 @@ function isPredictionResponse(value: unknown): value is PredictionResponse {
   ))
 }
 
-export async function getNearbyPredictions(latitude: number, longitude: number, signal?: AbortSignal): Promise<PredictionResponse> {
+export async function getNearbyPredictions(latitude: number, longitude: number, demoMode: boolean, signal?: AbortSignal): Promise<PredictionResponse> {
   if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
     throw new Error('Prediction coordinates are invalid.')
   }
@@ -33,7 +33,7 @@ export async function getNearbyPredictions(latitude: number, longitude: number, 
   const response = await fetch(`${API_BASE_URL}/predict/nearby`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ latitude, longitude }),
+    body: JSON.stringify({ latitude, longitude, demo_mode: demoMode }),
     signal,
   })
 
