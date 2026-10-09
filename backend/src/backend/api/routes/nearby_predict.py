@@ -51,8 +51,7 @@ async def predict_nearby(data: NearbyPredictionRequest):
 
     try:
         predictions = []
-        for item in weather:
-            model_features = prepare_model_features(item, data.demo_mode)
+        for index, item in enumerate(weather):
             prediction = {
                 "latitude": item["Latitude"],
                 "longitude": item["Longitude"],
@@ -61,6 +60,13 @@ async def predict_nearby(data: NearbyPredictionRequest):
                 "demo_multiplier": DEMO_FEATURE_MULTIPLIER if data.demo_mode else None,
                 **predict_with_explanation(model_features),
             }
+            prediction["affected_facilities"] = (
+                await fetch_nearby_facilities(
+                    prediction["latitude"], prediction["longitude"]
+                )
+                if index == 0
+                else []
+            )
             prediction["explanation"] = await explain_prediction(prediction)
             predictions.append(prediction)
     except ModelNotConfiguredError as error:
