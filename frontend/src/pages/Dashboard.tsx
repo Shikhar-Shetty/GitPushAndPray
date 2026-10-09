@@ -20,6 +20,7 @@ function formatUpdatedTime(): string {
 
 function Dashboard() {
   const [requestCoordinates, setRequestCoordinates] = useState<Coordinates | null>(null)
+  const [demoMode, setDemoMode] = useState(false)
   const [predictions, setPredictions] = useState<PredictionPoint[]>([])
   const [selectedPredictionIndex, setSelectedPredictionIndex] = useState(0)
   const [loadStatus, setLoadStatus] = useState<'idle' | 'loaded' | 'loading' | 'error'>('idle')
@@ -37,7 +38,7 @@ function Dashboard() {
     async function loadPredictions() {
       setLoadStatus('loading')
       try {
-        const response = await getNearbyPredictions(coordinates.latitude, coordinates.longitude, controller.signal)
+        const response = await getNearbyPredictions(coordinates.latitude, coordinates.longitude, demoMode, controller.signal)
         if (disposed) return
         setPredictions(response.predictions)
         setSelectedPredictionIndex((index) => response.predictions.length === 0 ? 0 : Math.min(index, response.predictions.length - 1))
@@ -56,7 +57,7 @@ function Dashboard() {
       disposed = true
       controller.abort()
     }
-  }, [requestCoordinates])
+  }, [requestCoordinates, demoMode])
 
   function handleRequestLocation(coordinates: Coordinates) {
     setLocationError(null)
@@ -97,6 +98,8 @@ function Dashboard() {
           onSelectPrediction={setSelectedPredictionIndex}
           onRequestLocation={handleRequestLocation}
           onUseMyLocation={handleUseMyLocation}
+          demoMode={demoMode}
+          onToggleDemoMode={setDemoMode}
         />
         <div className="dashboard-prediction-overlay">
           <PredictionCard prediction={selectedPrediction} isMock={false} />
