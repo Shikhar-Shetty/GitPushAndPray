@@ -14,6 +14,7 @@ from backend.services.open_meteo import (
     fetch_weather,
     nearby_coordinates,
 )
+from backend.services.overpass import FacilityServiceError, fetch_nearby_facilities
 from backend.services.shap import ModelNotConfiguredError, predict_with_explanation
 
 router = APIRouter()
@@ -30,6 +31,13 @@ class NearbyPredictionRequest(BaseModel):
     latitude: float
     longitude: float
     demo_mode: bool = False
+
+
+class NearbyFacilitiesRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    latitude: float
+    longitude: float
 
 
 def prepare_model_features(weather: dict[str, float], demo_mode: bool) -> dict[str, float]:
@@ -70,3 +78,14 @@ async def predict_nearby(data: NearbyPredictionRequest):
     except GroqServiceError as error:
         raise HTTPException(status_code=502, detail=str(error)) from error
     return {"predictions": predictions}
+
+
+@router.post("/predict/nearby/facilities")
+async def predict_nearby_facilities(data: NearbyFacilitiesRequest):
+    try:
+        facilities = await fetch_nearby_facilities(data.latitude, data.longitude)
+    except FacilityServiceError as error:
+        print(">>> Overpass unavailable; returning no facility data:", error)
+        facilities = []
+
+    return {"affected_facilities": facilities}
