@@ -7,16 +7,10 @@ import 'leaflet/dist/leaflet.css'
 
 interface FloodMapProps {
   predictions: PredictionPoint[]
-  loadStatus: 'idle' | 'loaded' | 'loading' | 'error'
-  lastUpdated: string | null
-  locationError: string | null
   selectedPredictionIndex: number
   requestedCoordinates: Coordinates | null
   onSelectPrediction: (index: number) => void
   onRequestLocation: (coordinates: Coordinates) => void
-  onUseMyLocation: () => void
-  demoMode: boolean
-  onToggleDemoMode: (enabled: boolean) => void
 }
 
 function MapClickHandler({ onRequestLocation }: Pick<FloodMapProps, 'onRequestLocation'>) {
@@ -46,73 +40,33 @@ function MapCenterController({ requestedCoordinates }: Pick<FloodMapProps, 'requ
 
 function FloodMap({
   predictions,
-  loadStatus,
-  lastUpdated,
-  locationError,
   selectedPredictionIndex,
   requestedCoordinates,
   onSelectPrediction,
   onRequestLocation,
-  onUseMyLocation,
-  demoMode,
-  onToggleDemoMode,
 }: FloodMapProps) {
-  const statusLabel = loadStatus === 'loading'
-    ? 'Loading...'
-    : loadStatus === 'error'
-      ? 'Load issue'
-      : loadStatus === 'loaded' ? 'Loaded' : 'Choose a location'
-
   return (
-    <section className="panel dashboard-map" aria-labelledby="map-heading">
-      <div className="panel-heading">
-        <div>
-          <h2 id="map-heading">Flood risk map</h2>
-          <p>Choose a location to load nearby backend predictions.</p>
-        </div>
-        <div className="map-header-actions">
-          <button
-            className="demo-mode-toggle"
-            type="button"
-            aria-pressed={demoMode}
-            onClick={() => onToggleDemoMode(!demoMode)}
-          >
-            <span>Demo mode</span>
-            <span className="demo-mode-state">{demoMode ? 'ON' : 'OFF'}</span>
-          </button>
-          <button className="map-location-button" type="button" onClick={onUseMyLocation}>Use my location</button>
-          <span className="status-pill" style={{ '--status-color': loadStatus === 'error' ? '#ff918c' : '#70d7cf', '--status-bg': loadStatus === 'error' ? 'rgba(242, 107, 103, 0.12)' : 'rgba(78, 205, 196, 0.12)' } as React.CSSProperties}>
-            {statusLabel}
-          </span>
-        </div>
-      </div>
-      {lastUpdated && <p className="map-updated">Last updated: {lastUpdated}</p>}
-      {locationError && <p className="map-error" role="alert">{locationError}</p>}
-      <div className="map-frame">
-        <MapContainer
-          center={[20, 0]}
-          className="leaflet-map"
-          scrollWheelZoom
-          zoom={12}
-        >
-          <MapClickHandler onRequestLocation={onRequestLocation} />
-          <MapCenterController requestedCoordinates={requestedCoordinates} />
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <PredictionLayer
-            predictions={predictions}
-            selectedIndex={selectedPredictionIndex}
-            onSelectPrediction={onSelectPrediction}
-          />
-        </MapContainer>
-        <MapLegend />
-      </div>
-      {loadStatus === 'error' && <p className="map-error">Unable to load predictions for this location.</p>}
-      {loadStatus === 'idle' && <p className="map-empty">Click the map or use your location to request predictions.</p>}
-      {loadStatus === 'loaded' && predictions.length === 0 && <p className="map-empty">No nearby prediction areas were returned.</p>}
-    </section>
+    <div className="map-frame">
+      <MapContainer
+        center={[20, 0]}
+        className="leaflet-map"
+        scrollWheelZoom
+        zoom={12}
+      >
+        <MapClickHandler onRequestLocation={onRequestLocation} />
+        <MapCenterController requestedCoordinates={requestedCoordinates} />
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <PredictionLayer
+          predictions={predictions}
+          selectedIndex={selectedPredictionIndex}
+          onSelectPrediction={onSelectPrediction}
+        />
+      </MapContainer>
+      <MapLegend />
+    </div>
   )
 }
 

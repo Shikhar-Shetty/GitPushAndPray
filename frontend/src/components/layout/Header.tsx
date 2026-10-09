@@ -3,12 +3,18 @@ import SOSButton from '../emergency/SOSButton'
 
 interface HeaderProps {
   lastUpdated: string
+  onBack?: () => void
 }
 
-function Header({ lastUpdated }: HeaderProps) {
+function Header({ lastUpdated, onBack }: HeaderProps) {
   return (
     <header className="app-header">
       <div className="brand-lockup">
+        {onBack && (
+          <button className="back-button" type="button" onClick={onBack} aria-label="Back to map">
+            ←
+          </button>
+        )}
         <span className="brand-mark" aria-hidden="true">FI</span>
         <div>
           <p className="brand-name">Flood Intelligence</p>
