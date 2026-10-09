@@ -32,16 +32,27 @@ async def explain_prediction(prediction: dict) -> str:
         "flood_probability": prediction["flood_probability"],
         "water_level_estimate_m": prediction["water_level_estimate_m"],
         "shap_values": prediction["shap_values"],
+        "demo_mode": prediction.get("demo_mode", False),
+        "demo_multiplier": prediction.get("demo_multiplier"),
     }
+
+    system_prompt = (
+        "Explain a flood prediction to a non-technical user in 2-3 concise sentences. "
+        "Use only the supplied data. Mention the strongest factors and whether the risk "
+        "is low, moderate, or high. And what other factors are actually causing this. "
+        "Plain text, Do not return JSON or bold or any other formatting."
+    )
+    if prompt["demo_mode"]:
+        system_prompt += (
+            " This is a demonstration: rainfall and water-level model inputs were multiplied "
+            "by the supplied demo multiplier. Clearly state that this is a simulated result, "
+            "not a real-world flood warning."
+        )
 
     messages = [
         {
             "role": "system",
-            "content": (
-                "Explain a flood prediction to a non-technical user in 2-3 concise sentences. "
-                "Use only the supplied data. Mention the strongest factors and whether the risk "
-                "is low, moderate, or high. And what other factors are actually causing this. Plain text, Do not return JSON or bold or any other formatting."
-            ),
+            "content": system_prompt,
         },
         {"role": "user", "content": json.dumps(prompt)},
     ]
