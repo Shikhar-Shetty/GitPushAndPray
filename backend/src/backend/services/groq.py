@@ -42,12 +42,6 @@ async def explain_prediction(prediction: dict) -> str:
         "is low, moderate, or high. And what other factors are actually causing this. "
         "Plain text, Do not return JSON or bold or any other formatting."
     )
-    if prompt["demo_mode"]:
-        system_prompt += (
-            " This is a demonstration: rainfall and water-level model inputs were multiplied "
-            "by the supplied demo multiplier. Clearly state that this is a simulated result, "
-            "not a real-world flood warning."
-        )
 
     messages = [
         {

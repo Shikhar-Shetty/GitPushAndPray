@@ -1,4 +1,3 @@
-import logging
 from math import isfinite
 from os import environ
 
@@ -15,11 +14,9 @@ from backend.services.open_meteo import (
     fetch_weather,
     nearby_coordinates,
 )
-from backend.services.overpass import FacilityServiceError, fetch_nearby_facilities
 from backend.services.shap import ModelNotConfiguredError, predict_with_explanation
 
 router = APIRouter()
-logger = logging.getLogger(__name__)
 DEMO_FEATURE_MULTIPLIER = float(environ.get("DEMO_FEATURE_MULTIPLIER", "2.0"))
 if not isfinite(DEMO_FEATURE_MULTIPLIER) or DEMO_FEATURE_MULTIPLIER <= 1:
     raise ValueError("DEMO_FEATURE_MULTIPLIER must be a finite number greater than 1")
@@ -54,7 +51,6 @@ async def predict_nearby(data: NearbyPredictionRequest):
 
     try:
         predictions = []
-        facility_lookup_failed = False
         for item in weather:
             model_features = prepare_model_features(item, data.demo_mode)
             prediction = {
@@ -65,21 +61,8 @@ async def predict_nearby(data: NearbyPredictionRequest):
                 "demo_multiplier": DEMO_FEATURE_MULTIPLIER if data.demo_mode else None,
                 **predict_with_explanation(model_features),
             }
-            prediction["affected_facilities"] = []
-            prediction["facilities_status"] = "not_applicable"
-            if prediction["prediction"] == 1:
-                try:
-                    prediction["affected_facilities"] = await fetch_nearby_facilities(
-                        prediction["latitude"], prediction["longitude"]
-                    )
-                    prediction["facilities_status"] = "available"
-                except FacilityServiceError:
-                    prediction["facilities_status"] = "unavailable"
-                    facility_lookup_failed = True
             prediction["explanation"] = await explain_prediction(prediction)
             predictions.append(prediction)
-        if facility_lookup_failed:
-            logger.warning("Overpass unavailable for one or more nearby facility lookups")
     except ModelNotConfiguredError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
     except GroqConfigurationError as error:
